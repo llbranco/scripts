@@ -3,19 +3,7 @@
 todos os scripts aqui contidos são estáveis e seguros
 o mal uso deles pode acarretar perda de dados entre outros problemas ainda não conhecidos pelo autor
 
-#Trash Cleaner
-Removedor de arquivos temporários
-e algumas ferramentas como backup de ip
-
-#Anti-update do Mal
-previne a execução da atualização automática de alguns aplicativos
-
-#SuperStress
-ferramenta para stress de hardware
-
-em breve mais scripts e uma melhor descrição
-
-
+#Leia com atenção
 ao usar estas você está ciente de que o autor não se responsabilza pelo mal uso das mesmas
 e que você será totalmente responsável caso use para hackear, piratear, burlar ou violar direito autorais.
 algumas partes de alguns scripts podem ser reconhecidas como malware/virus por ter seu comportamento parecido,
@@ -32,3 +20,15 @@ caso queira me dar um apoio para que eu continue criando mais scripts combine os
 Luciano Branco
 llbranco
 thelucianobrando@gmail.com
+
+#Trash Cleaner
+Removedor de arquivos temporários
+e algumas ferramentas como backup de ip
+
+#Anti-update do Mal
+previne a execução da atualização automática de alguns aplicativos
+
+#SuperStress
+ferramenta para stress de hardware
+
+em breve mais scripts e uma melhor descrição
