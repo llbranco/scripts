@@ -31,4 +31,8 @@ previne a execução da atualização automática de alguns aplicativos
 #SuperStress
 ferramenta para stress de hardware
 
+#VirusKiller
+elimina algumas ameaças de pendrives já infectados
+(necessário que o PC esteja livre de virus antes de desinfectar o pendrive)
+
 em breve mais scripts e uma melhor descrição
