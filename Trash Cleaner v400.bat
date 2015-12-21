@@ -14,7 +14,6 @@ goto var
 
 
 
-
 :menu
 title %newtitle%
 set opcao=
