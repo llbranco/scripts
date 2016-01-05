@@ -1,3 +1,6 @@
+deseja ver uma versão mais bonita desta página?
+acesse >>  http://llbranco.github.io/scripts/
+
 # coletânea de scripts de minha autoria
 
 todos os scripts aqui contidos são estáveis e seguros.
