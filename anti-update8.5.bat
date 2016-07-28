@@ -2,8 +2,9 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=8.4
-set date=06/nov/15
+set build=8.5
+set date=28/jul/16
+set ano=2016
 set versao=Anti-Update do mal ver: %build% - %date%
 set obrigado=Obrigado por desinstalar o %versao%
 set hostsfile="%SystemRoot%\system32\drivers\etc\hosts"
@@ -17,7 +18,7 @@ set windows_block=mpa.one.microsoft.com  sls.microsoft.com  genuine.microsoft.co
 :: Variaveis definidas
 rename %0 "anti-update%build%.bat"
 
-title  %versao% -- InfoBR 2015 -- By: llbranco
+title  %versao% -- InfoBR %ano% -- By: llbranco
 
 :menuprincipal
 set opcao=0
@@ -47,27 +48,27 @@ echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
 echo -------------------------------------------------------------------------------
 echo                               Selecione uma Opcao
 echo -------------------------------------------------------------------------------
-echo	 1  - Instalar ou Atualizar o Bloqueio (Versao Completa) remove GWX
-echo	 2  - Instalar ou Atualizar o Bloqueio (Apenas HOSTS)
-echo	 3  - Instalar ou Atualizar o Bloqueio (Apenas Registro)
-echo	 4  - Instalar ou Atualizar o Bloqueio (Apenas servicos)
-echo	 5  - Desistalar e Reverter ao original (Updates voltam a funcionar)
-echo	 6  - Sobre
-echo	 7  - Abrir HOSTS no Bloco de Notas
-echo	 8  - Remover GWX apenas (pode voltar se update estiver ativo)
+echo 1  - Instalar ou Atualizar o Bloqueio (Versao Completa) remove GWX
+echo 2  - Instalar ou Atualizar o Bloqueio (Apenas HOSTS)
+echo 3  - Instalar ou Atualizar o Bloqueio (Apenas Registro)
+echo 4  - Instalar ou Atualizar o Bloqueio (Apenas servicos)
+echo 5  - Desistalar e Reverter ao original (Updates voltam a funcionar)
+echo 6  - Sobre
+echo 7  - Abrir HOSTS no Bloco de Notas
+echo 8  - Remover GWX apenas (pode voltar se update estiver ativo)
 echo -------------------------------------------------------------------------------
 
-	Set /P opcao=	Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
-	Cls
-	If %opcao% equ 0 goto fim
-	If %opcao% equ 1 goto antiupdatecompleto
-	If %opcao% equ 2 goto antiupdatehosts
-	If %opcao% equ 3 goto antiupdateregistro
-	If %opcao% equ 4 goto antiupdateservicos	
-	If %opcao% equ 5 goto antiupdateuninstall
-	If %opcao% equ 6 goto antiupdatesobre
-	If %opcao% equ 7 goto antiupdateverhosts
-	if %opcao% equ 8 goto antiupdategwx
+ Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
+ Cls
+ If %opcao% equ 0 goto fim
+ If %opcao% equ 1 goto antiupdatecompleto
+ If %opcao% equ 2 goto antiupdatehosts
+ If %opcao% equ 3 goto antiupdateregistro
+ If %opcao% equ 4 goto antiupdateservicos 
+ If %opcao% equ 5 goto antiupdateuninstall
+ If %opcao% equ 6 goto antiupdatesobre
+ If %opcao% equ 7 goto antiupdateverhosts
+ if %opcao% equ 8 goto antiupdategwx
 goto fim
 
 :: Definindo vFlags
@@ -218,6 +219,7 @@ sc stop BITS
 sc stop wscsvc
 sc stop SharedAccess
 
+If %vFlag_completo%==1 goto antiupdategwx
 pause
 goto menuprincipal
 
@@ -288,6 +290,7 @@ echo Desabilitando GWX - agradecimentos a CronAsatruar forum BatchSatti
 echo.
 if not exist %systemroot%\system32\gwx\gwx.exe echo *** AVISO ***     *** GWX NAO INSTALADO ***
 taskkill /f /im  GWX.exe
+echo desinstalando hotfix do sistema
 for %%a in (
 3035583
 2919442
@@ -313,8 +316,9 @@ for %%a in (
 3083325
 3083710
 3083711
-) do start "" /w wusa /uninstall /kb:%%a /quiet /norestart
+) do start "" wusa /uninstall /kb:%%a /quiet /norestart
 ECHO.
+echo finalizando processos e finalizando tarefas agendadas
 for %%x in (
 launchtrayprocess
 refreshgwxconfig
@@ -341,8 +345,9 @@ schtasks /change /tn "microsoft\windows\setup\GWXTriggers\%%x" /DISABLE
 ::taskschd.msc
 
 ::criar proteção anti GWX
-if not exist "%systemroot%\system32\gwx\" md "%systemroot%\system32\gwx\"
-if not exist "%systemroot%\system32\gwx\download\" md "%systemroot%\system32\gwx\download\"
+echo iniciar protecao contra GWX
+if not exist "%systemroot%\system32\gwx" md "%systemroot%\system32\gwx"
+if not exist "%systemroot%\system32\gwx\download" md "%systemroot%\system32\gwx\download"
 
 ECHO.
 echo CRIANDO arquivos que teoricamente impediriam o GWX de ser instalados em seu PC
@@ -365,17 +370,22 @@ telemetrystore.xml.lock
 antigwx_by-llbranco.txt
 ) do (
 fsutil file createnew "%systemroot%\system32\gwx\%%x" 1
-CACLS "%systemroot%\system32\gwx\%%x" /G "%UserName%":R
-CACLS "%systemroot%\system32\gwx\%%x" /E /R "%UserName%"
-CACLS "%systemroot%\system32\gwx\%%x" /P "%UserName%":N
-CACLS "%systemroot%\system32\gwx\%%x" /D "%UserName%"
-CACLS "%systemroot%\system32\gwx\%%x" /D "System"
-CACLS "%systemroot%\system32\gwx\%%x" /D "everyone"
-CACLS "%systemroot%\system32\gwx\%%x" /D "todos"
+CACLS "%systemroot%\system32\gwx\%%x" /c /G "%UserName%":R
+CACLS "%systemroot%\system32\gwx\%%x" /c /E /R "%UserName%"
+CACLS "%systemroot%\system32\gwx\%%x" /c /P "%UserName%":N
+CACLS "%systemroot%\system32\gwx\%%x" /c /D "%UserName%"
+CACLS "%systemroot%\system32\gwx\%%x" /c /D "System"
+CACLS "%systemroot%\system32\gwx\%%x" /c /D "everyone"
+CACLS "%systemroot%\system32\gwx\%%x" /c /D "todos"
 )
-
+echo.
+echo processo terminado.
+echo agora sera solicitado que vc pressione qualquer tecla 3 vezes
+echo depois vc retornara ao menu principal
 pause
-goto :EOF
+pause
+pause
+goto menuprincipal
 
 :antiupdatesobre
 echo.&echo.&echo.
