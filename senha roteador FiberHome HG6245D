@@ -1,0 +1,19 @@
+FiberHome HG6245D
+username: user
+password: user1234
+
+ou
+username: user
+password: %0|F?H@f!berhO3e
+
+
+caso n tenha um porta de acesso padrão baixar 2 apps:
+https://nmap.org/download
+
+atualizar o ncap (o que vem com nmap é 1.0, no momento da criação desse arquivo o ncap é 1.75)
+https://npcap.com/#download
+
+
+
+referencia, caso necessario
+https://www.clubedohardware.com.br/forums/topic/1428907-n%C3%A3o-consigo-acessar-a-p%C3%A1gina-de-configura%C3%A7%C3%A3o-do-modem-fiberhome-hg6245d/
