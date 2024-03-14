@@ -3,9 +3,9 @@ color 17
 ::definindo variaveis
 	setlocal
 	set vCabeca=SuperStress! - Stress de Hardware
-	set vVersao=V 1.2.0
-	set vData=08/12/2014
-	set vRelease=%vVersao%    %vData%
+	set vVersao=1.2.1
+	set vData=14/03/2024
+	set vRelease=V %vVersao%    %vData%
 	set NewTitle=%vCabeca%     %vRelease%
 	set vFlag=0
 	
@@ -20,6 +20,8 @@ color 17
 	set stressping1=0
 	set stressping2=50
 	set script=%TMP%\superstress
+	
+	rename %0 "SuperStress%vVersao%.bat"
 
 :menu
 title %newtitle%
@@ -37,12 +39,13 @@ echo.
 echo                               Selecione uma Opcao
 echo.
 echo ===============================================================================
-echo	 1  - Teste de Calculo				(uso de CPU alto)
-echo	 2  - Teste de Ping da Morte IPv4/v6		(uso de CPU medio)
+echo	 1  - Teste de Calculo			(uso de CPU alto)
+echo	 2  - Teste de Ping da Morte IPv4/v6	(uso de CPU medio)
 echo	 3  - Dificultar Recuperacao de dados criando dummyfiles
-echo	 4  - Abrir janelas INFINITAMENTE		(PODE DANIFICAR O PC)
+echo	 4  - Abrir janelas INFINITAMENTE	(PODE DANIFICAR O PC)
 echo	 5  - Calculo + Ping			(uso de CPU INTENSIVO, recomendado)
-echo	 6  - Sobre
+echo	 6  - Fork Bomb				(SUPER INTENSO)
+echo	 0  - Sobre
 echo	 9  - Fechar todas as janelas do script (fecha outros scripts tambem)
 echo ===============================================================================
 echo janelas abertas = CALCULOS (%stressnum1%) - PING (%stressping1%)
@@ -55,7 +58,8 @@ echo.
 	If %opcao% equ 3 goto 3dummyfill
 	If %opcao% equ 4 goto 4infinito
 	If %opcao% equ 5 goto 5numping
-	If %opcao% equ 6 goto 6sobre
+	If %opcao% equ 6 goto 6bomba
+	If %opcao% equ 0 goto 0sobre
 	If %opcao% equ 9 goto 9killall
 goto fim
 
@@ -167,10 +171,20 @@ echo goto testeini
 start /min "" cmd /k %script%ininito.bat
 goto voltamenu
 
+:6bomba
+title Teste Fork Bomb
+echo Boa sorte, seu pc vai travar mto rapido
+echo.
+echo pressione qualquer tecla para iniciar o Fork Bomb
 
-:6sobre
+echo ^%%0^|^%%0>forkbomb.bat
+pause
+start /min "" forkbomb.bat
+goto voltamenu
+
+:0sobre
 echo SuperStress de Luciano Branco e licenciado sob uma Licenca Creative Commons
-echo Atribuicaoo-Uso nao-comercial-Compartilhamento pela mesma licen็a 3.0 Unported.
+echo Atribuicaoo-Uso nao-comercial-Compartilhamento pela mesma licenca 3.0 Unported.
 echo http://creativecommons.org/licenses/by-nc-sa/3.0/
 echo.
 echo sinta-se livre para distribuir e modificar, desde que mantenha os creditos
