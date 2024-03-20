@@ -2,8 +2,8 @@
 color 71
 ::definindo variaveis
 	setlocal
-set build=1.0
-set date=18/mar/24
+set build=1.1
+set date=20/mar/24
 set ano=2024
 set versao=Compactar OS ver: %build% - %date%
 rename %0 "Compactar_OS%build%.bat"
@@ -56,6 +56,7 @@ compact /c /s /a /i /exe:lzx "%windir%\assembly\*"
 compact /c /s /a /i /exe:lzx "%windir%\inf\*"
 compact /c /s /a /i /exe:lzx "%windir%\infused apps\*"
 compact /c /s /a /i /exe:lzx "%windir%\installer\*"
+compact /c /s /a /i /exe:lzx "%windir%\winsxs"
 
 compact /c /s /a /i /exe:xpress16k "%windir%\Fonts\*" 
 compact /c /s /a /i /exe:xpress16k "%windir%\InfusedApps\*" 
