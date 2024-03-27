@@ -1,0 +1,89 @@
+Windows Registry Editor Version 5.00
+
+; informações sobre dados do registro
+; https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/
+
+
+[HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify]
+"IconStreams"=-
+"PastIconsStream"=-
+
+[-HKEY_CURRENT_USER\Software\7-Zip\FM]
+[HKEY_CURRENT_USER\Software\7-Zip\FM]
+
+[-HKEY_CURRENT_USER\Software\Winrar\ArchHistory]
+[HKEY_CURRENT_USER\Software\Winrar\ArchHistory]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Paint\Recent File List]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Paint\Recent File List]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32]
+"CIDSizeMRU"=-
+"FirstFolder"=-
+"LastVisitedPidlMRU"=-
+"LastVisitedPidlMRULegacy"=-
+"OpenSavePidlMRU"=-
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU]
+
+; as linhas abaixo apenas apagam a ordem dos arquivos nas pastas
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Bags]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Bags]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\BagMRU]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\BagMRU]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\NoRoam]
+;[HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\NoRoam]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\MuiCache]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\MuiCache]
+;fim
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Persisted]
+;[HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Persisted]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers]
+
+[-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache]
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache]
+
+[-HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Session Manager\AppCompatCache]
+[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Session Manager\AppCompatCache]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage\AppSwitched]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage\AppSwitched]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage\ShowJumpView]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage\ShowJumpView]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\DirectInput]
+[HKEY_CURRENT_USER\Software\Microsoft\DirectInput]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths]
+
+[-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit]
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit]
+
+[-]
+[]
+
+
+
+
+
