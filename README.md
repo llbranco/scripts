@@ -39,3 +39,7 @@ Elimina algumas ameaças de pendrives já infectados
 (necessário que o PC esteja livre de virus antes de desinfectar o pendrive)
 
 em breve mais scripts e uma melhor descrição
+
+
+para permitir que script ps1 seja executado, use:
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
