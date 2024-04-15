@@ -184,7 +184,6 @@ goto menu
 
 :telemetria
 echo adicionando regras de firewall para bloquear telemetrias da microsoft (por ip)
-pause
 netsh advfirewall firewall add rule name="%fw_name%" dir=out action=block remoteip=%ms_ip% enable=yes
 pause
 goto menu
