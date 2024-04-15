@@ -3,13 +3,13 @@
 ::setlocal enabledelayedexpansion
 setlocal
 color 71
-set build=1.0
+set build=1.1
 set date=15/04/24
 set ano=2024
 set bkp=%SystemDrive%\bkp_drivers
 set versao=Backup Driver ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
-:: gerenciador de dispositivos Start "" "devmgmt.msc" & Exit
+
 rename %0 "bkp_driver_v%build%.bat"
 
 cd /d %SystemDrive%
@@ -53,6 +53,7 @@ echo                               Selecione uma Opcao
 echo %linha%
 echo 1  - Efetuar backup dos drivers
 echo 2  - Restaurar backup ( %verificabkp% )
+echo 3  - Gerenciador de dispositivos
 echo 9  - Sobre
 echo %linha%
 
@@ -60,6 +61,7 @@ echo %linha%
  Cls
  If %opcao% equ 1 goto backup
  If %opcao% equ 2 goto restaura
+ If %opcao% equ 2 goto devmgm
  if %opcao% equ 9 goto sobre
 goto fim
 
@@ -124,4 +126,9 @@ pnputil /add-driver "%SystemDrive%\bkp_drivers\drivers\*.inf" /subdirs /install
 ::Dism /online /Add-Driver /Driver:"%SystemDrive%\bkp_drivers\drivers" /Recurse
 ::powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "&{Add-WindowsDriver -Driver "%SystemDrive%\bkp_drivers\drivers" -Recurse}"
 pause
+goto menu
+
+:devmgm
+:: gerenciador de dispositivos
+Start "" "devmgmt.msc"
 goto menu
