@@ -9,7 +9,7 @@ set ano=2024
 set bkp=%SystemDrive%\bkp_drivers
 set versao=Backup Driver ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
-
+:: gerenciador de dispositivos Start "" "devmgmt.msc" & Exit
 rename %0 "bkp_driver_v%build%.bat"
 
 cd /d %SystemDrive%
