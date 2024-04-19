@@ -43,3 +43,8 @@ em breve mais scripts e uma melhor descrição
 
 para permitir que script ps1 seja executado, use:
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+ou
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+
+para desbloquear scripts recursivamente
+PS> ls -Recurse *.ps*1 | Unblock-File
