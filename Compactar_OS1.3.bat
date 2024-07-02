@@ -2,8 +2,8 @@
 color 71
 ::definindo variaveis
 	setlocal
-set build=1.2
-set date=01/jul/24
+set build=1.3
+set date=02/jul/24
 set ano=2024
 set versao=Compactar OS ver: %build% - %date%
 rename %0 "Compactar_OS%build%.bat"
@@ -23,8 +23,11 @@ echo                               Selecione uma Opcao
 echo -------------------------------------------------------------------------------
 echo 1  - Compactar apenas a pasta windows
 echo 2  - Compactar apenas pastas adjacentes
-echo 3  - compactar a pasta windows e pastas adjacentes
-echo 4  - compactar outra pasta ou drive
+echo 3  - Compactar a pasta windows e pastas adjacentes
+echo 4  - Compactar outra pasta ou drive
+echo 5  - Descompactar Windows
+echo 6  - Descompactar pastas adjacentes do windows
+echo 7  - Descompactar outra pasta ou disco
 echo 9  - Sobre
 echo -------------------------------------------------------------------------------
 
@@ -35,6 +38,9 @@ echo ---------------------------------------------------------------------------
  If %opcao% equ 2 goto pastas
  If %opcao% equ 3 goto win
  If %opcao% equ 4 goto outro
+ If %opcao% equ 5 goto uncompwin
+ If %opcao% equ 6 goto uncomppastas
+ If %opcao% equ 6 goto uncompoutro
  If %opcao% equ 9 goto sobre
 goto fim
 
@@ -86,7 +92,50 @@ goto menu
 echo vc nao selecionou nenhuma pasta ou selecionou uma pasta invalida
 echo favor escolha uma opcao valida
 pause
-goto outro
+goto menu
+
+:uncompwin
+title  %versao% -- Desompactando Windows -- By: llbranco
+compact.exe /CompactOS:never
+compact /u /s /a %windir%
+goto menu
+
+:uncomppastas
+title  %versao% -- Descompactando pastas adjacentes -- By: llbranco
+compact /u "%systemdrive%\Program Files\*"
+compact /u "%systemdrive%\Program Files (x86)\*"
+compact /u "%systemdrive%\ProgramData\*"
+compact /u "%systemdrive%\Windows\System32\DriverStore\*"
+
+compact /u "%homeDrive%\MSOCache\*"
+compact /u "%windir%\assembly\*"
+compact /u "%windir%\inf\*"
+compact /u "%windir%\infused apps\*"
+compact /u "%windir%\installer\*"
+compact /u "%windir%\winsxs"
+
+compact /u "%windir%\Fonts\*" 
+compact /u "%windir%\InfusedApps\*" 
+compact /u "%windir%\Installer\*" 
+compact /u "%windir%\Panther\*" 
+compact /u "%windir%\SoftwareDistribution\*" 
+compact /u "%windir%\System32\Catroot2\*" 
+compact /u "%windir%\System32\LogFiles\*" 
+goto menu
+
+
+:uncompoutro
+set f_outro=0
+Cls
+echo Qual pasta ou drive vc gostaria de compactar (sem a "\")?
+echo favor nao apontar arquivos apenas drive ou pasta
+echo.
+ Set /P f_outro= Tecle a opcao desejada e [ENTER] ou 9 e [ENTER] para retornar: 
+ Cls
+ If %f_outro% equ 0 goto erro_outro
+ If %f_outro% equ 9 goto menu
+compact /U "%f_outro%\*"
+goto menu
 
 :sobre
 echo.&echo.&echo.
