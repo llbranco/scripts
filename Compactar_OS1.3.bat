@@ -40,7 +40,7 @@ echo ---------------------------------------------------------------------------
  If %opcao% equ 4 goto outro
  If %opcao% equ 5 goto uncompwin
  If %opcao% equ 6 goto uncomppastas
- If %opcao% equ 6 goto uncompoutro
+ If %opcao% equ 7 goto uncompoutro
  If %opcao% equ 9 goto sobre
 goto fim
 
