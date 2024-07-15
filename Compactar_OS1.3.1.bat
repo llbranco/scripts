@@ -2,8 +2,8 @@
 color 71
 ::definindo variaveis
 	setlocal
-set build=1.3
-set date=02/jul/24
+set build=1.3.1
+set date=17/jul/24
 set ano=2024
 set versao=Compactar OS ver: %build% - %date%
 rename %0 "Compactar_OS%build%.bat"
@@ -114,13 +114,14 @@ compact /u "%windir%\infused apps\*"
 compact /u "%windir%\installer\*"
 compact /u "%windir%\winsxs"
 
-compact /u "%windir%\Fonts\*" 
-compact /u "%windir%\InfusedApps\*" 
-compact /u "%windir%\Installer\*" 
-compact /u "%windir%\Panther\*" 
-compact /u "%windir%\SoftwareDistribution\*" 
-compact /u "%windir%\System32\Catroot2\*" 
-compact /u "%windir%\System32\LogFiles\*" 
+compact /u "%windir%\Fonts\*"
+compact /u "%windir%\InfusedApps\*"
+compact /u "%windir%\Installer\*"
+compact /u "%windir%\Panther\*"
+compact /u "%windir%\SoftwareDistribution\*"
+compact /u "%windir%\System32\Catroot2\*"
+compact /u "%windir%\System32\LogFiles\*"
+pause
 goto menu
 
 
@@ -130,11 +131,11 @@ Cls
 echo Qual pasta ou drive vc gostaria de compactar (sem a "\")?
 echo favor nao apontar arquivos apenas drive ou pasta
 echo.
- Set /P f_outro= Tecle a opcao desejada e [ENTER] ou 9 e [ENTER] para retornar: 
+ Set /P f_outro= Tecle a opcao desejada e [ENTER] ou [ENTER] para retornar: 
  Cls
  If %f_outro% equ 0 goto erro_outro
- If %f_outro% equ 9 goto menu
 compact /U "%f_outro%\*"
+pause
 goto menu
 
 :sobre
