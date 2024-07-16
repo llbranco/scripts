@@ -227,3 +227,10 @@ goto menuprincipal
 :fim
 endlocal
 goto :eof
+
+
+:: incluir na proxima atualização
+::
+:: https://www.ventoy.net/en/experience_rebuildBCD.html
+:: https://answers.microsoft.com/pt-br/windows/forum/all/bootrec-rebuildbcd-arquivo-ou-pasta-corrompido/3ece9339-58a4-4f2c-b92e-643c61222c29
+:: https://www.lifewire.com/how-to-rebuild-the-bcd-in-windows-2624508
