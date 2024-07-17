@@ -1,13 +1,15 @@
-@echo off
+@echo off & cd /d %~dp0
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.0
-set date=16/jul/24
+set build=1.1
+set date=17/jul/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
+set linha=-------------------------------------------------------------------------------
 :: set frs_log=%~dp0reparoboot.log
-set frs_log=reparoboot.log
+set frs_log=%~dp0reparoboot.log
+if not exist "%frs_log%" echo arquivo de log criado em %date% - %time%>%frs_log%
 
 :: Variaveis definidas
 rename %0 "ferramenta_reparo_simples_v%build%.bat"
@@ -17,17 +19,15 @@ title  %versao% -- %ano% -- By: llbranco
 :menuprincipal
 set opcao=0
 cls
-echo -------------------------------------------------------------------------------
+echo %linha%
 echo    O %versao% %instalado%
-echo -------------------------------------------------------------------------------
+echo %linha%
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
-echo                    Projeto de Luciano Branco iniciado em 2024
 echo           Ferramenta para executar reparos simples no windows
-echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
-echo -------------------------------------------------------------------------------
+echo %linha%
+echo Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
-echo -------------------------------------------------------------------------------
+echo %linha%
 echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
 echo 2  - DISM /Online /Cleanup-image /RestoreHealth
 echo 3  - SFC /Scannow
@@ -37,38 +37,43 @@ echo 6  - CHKDSK /F/V/R/X X: (SELECIONE A UNIDADE)
 echo 7  - Sobre
 echo 8  - Abrir janelas cmd e notepad
 echo 9  - Arquivo de log (%frs_log%)
-echo a  - remover unidade
-echo 0  - Sair
-echo -------------------------------------------------------------------------------
+echo A  - Remover/ejetar unidade
+echo B  - Powershell
+echo C  - Mudar Perfil de energia
+echo 0  - Sair                                           https://github.com/llbranco
+echo %linha%
+echo O arquivo de log sera criado na pasta onde o script esta sendo executado
+echo Arquivo de log: %frs_log% & echo.
 
  Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
  Cls
  If %opcao% equ 0 goto fim
- If %opcao% equ 1 goto op1
- If %opcao% equ 2 goto op2
- If %opcao% equ 3 goto op3
- If %opcao% equ 4 goto op4
- If %opcao% equ 5 goto op5
- If %opcao% equ 6 goto op6
- If %opcao% equ 7 goto op7
- If %opcao% equ 8 goto op8
- If %opcao% equ 9 goto op9
- If %opcao% equ a goto opa
- If %opcao% equ A goto opa
+ goto op%opcao%
 goto fim
 
 :op1
+echo.>>%frs_log%
+echo executando "DISM /online /Cleanup-Image /StartComponentCleanup" >>%frs_log%
 @echo on
+for /f "delims=" %%i in (
 DISM /online /Cleanup-Image /StartComponentCleanup
+) do (
+    echo [%date%, %time%] %%i >> %frs_log%
+)
 @echo off
 pause
 goto menuprincipal
 
 :op2
+echo.>>%frs_log%
+echo executando "DISM /Online /Cleanup-image /RestoreHealth" >>%frs_log%
 @echo on
+for /f "delims=" %%i in (
 DISM /Online /Cleanup-image /RestoreHealth
+) do (
+    echo [%date%, %time%] %%i >> %frs_log%
+)
 @echo off
-pause
 goto menuprincipal
 
 :op3
@@ -79,10 +84,9 @@ echo.
 echo um arquivo de log sera gerado na pasta %~dp0
  Set /P unidade= Selecione a letra da unidade sem os : e [ENTER]: 
   If %unidade% equ 0 goto op3_erro
-if not exist "%frs_log%" echo arquivo de log criado em %date% - %time%>%frs_log%
+
 echo.>>%frs_log%
-echo %date% - %time% >> %frs_log%
-echo executando reparo de sfc /scannow na unidade %unidade%: >> %frs_log%
+echo Executando reparo de sfc /scannow na unidade %unidade%: >> %frs_log%
 @echo on
 for /f "delims=" %%i in (
 'sfc /scannow /offbootdir=e:\ /offwindir=%unidade%:\Windows'
@@ -101,9 +105,7 @@ echo.
 echo um arquivo de log sera gerado na pasta %~dp0
  Set /P unidade= Selecione a letra da unidade sem os : e [ENTER]: 
   If %unidade% equ 0 goto op4_erro
-if not exist "%frs_log%" echo arquivo de log criado em %date% - %time%>%frs_log%
 echo.>>%frs_log%
-echo %date% - %time% >>%frs_log%
 echo executando reparo de boot / BCD na unidade %unidade%:>>%frs_log%
 
 @echo on
@@ -128,12 +130,17 @@ pause
 @echo off
 
 :op4_no
+echo.>>%frs_log%
+echo executando "BCDEdit em %unidade%" >>%frs_log%
 @echo on
-Bcdedit /store %unidade%:\boot\bcd /set {bootmgr} device partition=%unidade%: >>%frs_log%
-Bcdedit /store %unidade%:\boot\bcd /set {memdiag} device partition=%unidade%: >>%frs_log%
-bcdboot C:\Windows /s S: /f ALL >>%frs_log%
+for /f "delims=" %%i in (
+'Bcdedit /store %unidade%:\boot\bcd /set {bootmgr} device partition=%unidade%:'
+'Bcdedit /store %unidade%:\boot\bcd /set {memdiag} device partition=%unidade%:'
+'bcdboot C:\Windows /s S: /f ALL'
+) do (
+    echo [%date%, %time%] %%i >> %frs_log%
+)
 @echo off
-echo. &echo fim do reparo&echo. >>%frs_log%
 pause
 goto menuprincipal
 
@@ -154,8 +161,14 @@ echo Selecione a unidade que deseja executar o checkdisk
 echo somente a letra da unidade sem os :
  Set /P unidade= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
   If %unidade% equ 0 goto op6_erro
- @echo on
+echo.>>%frs_log%
+echo executando "CHKDSK /F/V/R/X em %unidade%" >>%frs_log%
+@echo on
+for /f "delims=" %%i in (
 CHKDSK /F/V/R/X %unidade%:
+) do (
+    echo [%date%, %time%] %%i >> %frs_log%
+)
 @echo off
 pause
 goto menuprincipal
@@ -168,22 +181,23 @@ goto op6
 
 :op7
 echo.&echo.&echo.
-echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bit
-echo           Foi testado e funciona perfeitamente do Windows XP ao 8.1
-echo      Foi testado e funciona perfeitamente do Windows 2000 ao 2012 server
-echo.
+echo %linha%
 echo                    Projeto de Luciano Branco iniciado em 2024
-echo.
-echo           O Anti-Update bloqueia atualizacao de: Windows, Corel e Adobe
-echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
+echo                                   https://github.com/llbranco
+echo %linha%
 echo.&echo.&echo.
-pause
 echo O trabalho Ferramenta de Reparo Simples de Luciano Branco
-echo está licenciado com uma Licença Creative Commons
-echo Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional.
+echo esta licenciado com uma Licenca Creative Commons
+echo Atribuicao-NaoComercial-CompartilhaIgual 4.0 Internacional.
+echo %linha%
 echo.&echo.&echo.
-pause
+choice /C:SN /M "Gostaria de abrir o GitHub do projeto?"
+IF %ERRORLEVEL% equ 1 goto github
+IF %ERRORLEVEL% equ 2 goto menuprincipal
+goto menuprincipal
+
+:github
+start "" https://github.com/llbranco/scripts
 goto menuprincipal
 
 :op8
@@ -192,9 +206,6 @@ start "" notepad
 goto menuprincipal
 
 :op9
-echo arquivo de log: %frs_log%
-if not exist "%~dp0reparoboot.log" echo arquivo de log criado em %date% - %time% > %frs_log%
-
 echo. >> %frs_log%
 echo teste do arquivo de log %date% - %time% >> %frs_log%
 echo. >> %frs_log%
@@ -224,10 +235,56 @@ if "%ERRORLEVEL%"=="1" (
 del /F %tempfile%
 goto menuprincipal
 
+:opb
+start "" powershell.exe
+goto menuprincipal
+
+:opc
+cls
+set power=0
+echo selecione um dos perfis de energia a seguir
+echo Dica: copie e cole para melhor resultado
+echo.
+echo scheme_max			power saver
+echo scheme_min			high performance
+echo scheme_balanced	balanced
+echo 8 para deletar o plano personalizado
+echo 9 para um plano personalizado
+
+
+echo.
+ Set /P power= Digite o nome do perfil que deseja [ENTER] para fechar: 
+ Cls
+ If %power% equ 0 goto opc
+ if %power% equ 9 goto opc_custom
+ 
+ echo vc escolheu "%power%"
+ pause
+powercfg -duplicatescheme "%power%"
+powercfg -setactive "%power%"
+%windir%\System32\control.exe powercfg.cpl
+goto menuprincipal
+
+:opc_del
+powercfg /delete e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg /delete "InfoBR"
+echo retornando ao menu de perfil de energia
+pause
+goto opc
+
+:opc_custom
+echo vc escolheu o plano personalizado
+powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg -setactive e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg /changename e9a42b02-d5df-448d-aa00-03f14749eb61 "InfoBR"
+echo .
+%windir%\System32\control.exe powercfg.cpl
+pause
+goto menuprincipal
+
 :fim
 endlocal
 goto :eof
-
 
 :: incluir na proxima atualização
 ::
