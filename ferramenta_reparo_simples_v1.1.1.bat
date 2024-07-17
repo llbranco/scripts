@@ -2,7 +2,7 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1
+set build=1.1.1
 set date=17/jul/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
@@ -55,11 +55,11 @@ goto fim
 echo.>>%frs_log%
 echo executando "DISM /online /Cleanup-Image /StartComponentCleanup" >>%frs_log%
 @echo on
-for /f "delims=" %%i in (
+::for /f "delims=" %%i in (
 DISM /online /Cleanup-Image /StartComponentCleanup
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 pause
 goto menuprincipal
@@ -68,11 +68,11 @@ goto menuprincipal
 echo.>>%frs_log%
 echo executando "DISM /Online /Cleanup-image /RestoreHealth" >>%frs_log%
 @echo on
-for /f "delims=" %%i in (
+::for /f "delims=" %%i in (
 DISM /Online /Cleanup-image /RestoreHealth
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 goto menuprincipal
 
@@ -88,11 +88,11 @@ echo um arquivo de log sera gerado na pasta %~dp0
 echo.>>%frs_log%
 echo Executando reparo de sfc /scannow na unidade %unidade%: >> %frs_log%
 @echo on
-for /f "delims=" %%i in (
-'sfc /scannow /offbootdir=e:\ /offwindir=%unidade%:\Windows'
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::for /f "delims=" %%i in (
+sfc /scannow /offbootdir=e:\ /offwindir=%unidade%:\Windows
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 findstr /c:"[SR]" %windir%\Logs\CBS\CBS.log >> %frs_log%
 pause
@@ -109,14 +109,14 @@ echo.>>%frs_log%
 echo executando reparo de boot / BCD na unidade %unidade%:>>%frs_log%
 
 @echo on
-for /f "delims=" %%i in (
-'Bcdedit /export %unidade%:\BCD_Backup'
-'Bootrec /FixMbr'
-'Bootrec /fixboot'
-'Bootrec /rebuildbcd'
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::for /f "delims=" %%i in (
+Bcdedit /export %unidade%:\BCD_Backup
+Bootrec /FixMbr
+Bootrec /fixboot
+Bootrec /rebuildbcd
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 choice /C:SN /M:"O comando acima apresentou algum erro? [SN]"
 IF ERRORLEVEL ==1 GOTO op4_yes
@@ -133,13 +133,13 @@ pause
 echo.>>%frs_log%
 echo executando "BCDEdit em %unidade%" >>%frs_log%
 @echo on
-for /f "delims=" %%i in (
-'Bcdedit /store %unidade%:\boot\bcd /set {bootmgr} device partition=%unidade%:'
-'Bcdedit /store %unidade%:\boot\bcd /set {memdiag} device partition=%unidade%:'
-'bcdboot C:\Windows /s S: /f ALL'
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::for /f "delims=" %%i in (
+Bcdedit /store %unidade%:\boot\bcd /set {bootmgr} device partition=%unidade%:
+Bcdedit /store %unidade%:\boot\bcd /set {memdiag} device partition=%unidade%:
+bcdboot C:\Windows /s S: /f ALL
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 pause
 goto menuprincipal
@@ -164,11 +164,11 @@ echo somente a letra da unidade sem os :
 echo.>>%frs_log%
 echo executando "CHKDSK /F/V/R/X em %unidade%" >>%frs_log%
 @echo on
-for /f "delims=" %%i in (
+::for /f "delims=" %%i in (
 CHKDSK /F/V/R/X %unidade%:
-) do (
-    echo [%date%, %time%] %%i >> %frs_log%
-)
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
 @echo off
 pause
 goto menuprincipal
