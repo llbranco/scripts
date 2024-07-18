@@ -6,7 +6,7 @@ set build=1.3.1
 set date=17/jul/24
 set ano=2024
 set versao=Compactar OS ver: %build% - %date%
-rename %0 "Compactar_OS%build%.bat"
+rename "%~f0" "Compactar_OS_%build%.bat"
 
 :menu
 title  %versao% -- %ano% -- By: llbranco
