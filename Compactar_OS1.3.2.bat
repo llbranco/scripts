@@ -2,11 +2,11 @@
 color 71
 ::definindo variaveis
 	setlocal
-set build=1.3.1
-set date=17/jul/24
+set build=1.3.2
+set date=19/jul/24
 set ano=2024
 set versao=Compactar OS ver: %build% - %date%
-rename "%~f0" "Compactar_OS_%build%.bat"
+rename %~f0 "Compactar_OS%build%.bat"
 
 :menu
 title  %versao% -- %ano% -- By: llbranco
@@ -102,25 +102,25 @@ goto menu
 
 :uncomppastas
 title  %versao% -- Descompactando pastas adjacentes -- By: llbranco
-compact /u "%systemdrive%\Program Files\*"
-compact /u "%systemdrive%\Program Files (x86)\*"
-compact /u "%systemdrive%\ProgramData\*"
-compact /u "%systemdrive%\Windows\System32\DriverStore\*"
+compact /u /s /a "%systemdrive%\Program Files\*"
+compact /u /s /a "%systemdrive%\Program Files (x86)\*"
+compact /u /s /a "%systemdrive%\ProgramData\*"
+compact /u /s /a "%systemdrive%\Windows\System32\DriverStore\*"
 
-compact /u "%homeDrive%\MSOCache\*"
-compact /u "%windir%\assembly\*"
-compact /u "%windir%\inf\*"
-compact /u "%windir%\infused apps\*"
-compact /u "%windir%\installer\*"
-compact /u "%windir%\winsxs"
+compact /u /s /a "%homeDrive%\MSOCache\*"
+compact /u /s /a "%windir%\assembly\*"
+compact /u /s /a "%windir%\inf\*"
+compact /u /s /a "%windir%\infused apps\*"
+compact /u /s /a "%windir%\installer\*"
+compact /u /s /a "%windir%\winsxs"
 
-compact /u "%windir%\Fonts\*"
-compact /u "%windir%\InfusedApps\*"
-compact /u "%windir%\Installer\*"
-compact /u "%windir%\Panther\*"
-compact /u "%windir%\SoftwareDistribution\*"
-compact /u "%windir%\System32\Catroot2\*"
-compact /u "%windir%\System32\LogFiles\*"
+compact /u /s /a "%windir%\Fonts\*"
+compact /u /s /a "%windir%\InfusedApps\*"
+compact /u /s /a "%windir%\Installer\*"
+compact /u /s /a "%windir%\Panther\*"
+compact /u /s /a "%windir%\SoftwareDistribution\*"
+compact /u /s /a "%windir%\System32\Catroot2\*"
+compact /u /s /a "%windir%\System32\LogFiles\*"
 pause
 goto menu
 
