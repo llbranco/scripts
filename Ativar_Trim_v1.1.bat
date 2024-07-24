@@ -10,10 +10,11 @@ SETLOCAL EnableDelayedExpansion
 cd /d "%~dp0"
 cls
 
-set build=1.0
-set date=17/04/2024
+set build=1.1
+set date=24/jul/2024
 set ano=2024
 set versao=Ativar Trim para SSD: %build% - %date%
+set linha================================================================================
 rename %0 "Ativar_Trim_v%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
@@ -33,33 +34,33 @@ echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
 echo                    Projeto de Luciano Branco iniciado em 2024
 echo                  Ativar o TRIM para melhorar desempenho em SSD
 echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
-echo ===============================================================================
+echo %linha%
 echo                     ATENCAO: DESABILITADO significa HABILITADO
 echo                            ZERO Significa Habilitado
 echo Estado atual do Trim:
 fsutil behavior query DisableDeleteNotify
 echo.
-echo                               Selecione uma Opção
-echo ===============================================================================
+echo                               Selecione uma Opcao
+echo %linha%
 echo.
 echo		 1  - HABILITAR TRIM
 echo		 2  - DESABILITAR TRIM
+echo		 3  - WINDOWS SEARCH
+echo		 4  - Desabilitar servico do windows search
 echo		 9  - Sobre
 echo.
-echo ===============================================================================
+echo %linha%
 echo                                               	por: llbranco
 echo                                               	github.com/llbranco
 echo                                               	thelucianobranco@gmail.com
 echo.
 	Set /P menu=	Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para %ips1%: 
 	Cls
-	If %menu% equ 1 goto HABILITAR
-	If %menu% equ 2 goto desabilitar
-	If %menu% equ 9 goto sobre
+ If %menu% equ 0 goto fim
+ goto op%menu%
 exit
 
-:HABILITAR
+:op1
 echo A Microsoft em toda sua incapacidade de contar
 echo decidiu fazer com que ZERO significasse ativo
 echo.
@@ -70,7 +71,7 @@ fsutil behavior set DisableDeleteNotify 0
 pause
 goto menu
 
-:Desabilitar
+:op2
 echo A Microsoft em toda sua incapacidade de contar
 echo decidiu fazer com que ZERO significasse ativo
 echo.
@@ -81,7 +82,35 @@ fsutil behavior set DisableDeleteNotify 1
 pause
 goto menu
 
-:sobre
+:op3
+echo Abrindo janela do servico de indexacao do Windows
+echo.
+::start "" rundll32.exe shell32.dll,Control_RunDLL srchadmin.dll
+start "" control.exe srchadmin.dll
+pause
+goto menu
+
+:op4
+echo Desabilitando servico de indexacao do Windows
+echo permitindo um aumento de desempenho
+echo e maior vida util a SSDs
+echo.
+sc stop "wsearch" && sc config "wsearch" start=disabled
+pause
+goto menu
+
+:op5
+echo Habilitando servico de indexacao do Windows
+echo esse procedimento diminui o desempenho do sistema
+echo e diminui a vida util do seu SSD
+echo.
+echo a fim de MINIMIZAR OS ESTRAGOS q esse servico faz
+echo vou marcar ele como "iniciar com atraso"
+sc config "wsearch" start=delayed-auto && sc start "wsearch"
+pause
+goto menu
+
+:op9
 echo.&echo.&echo.
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bit
 echo.
@@ -89,7 +118,6 @@ echo                    Projeto de Luciano Branco iniciado em 2024
 echo.
 echo                  Ativar o TRIM para melhorar desempenho em SSD
 echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
 echo.&echo.&echo.
 pause
 echo este script está licenciado com uma Licença Creative Commons
