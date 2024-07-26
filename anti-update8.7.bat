@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=8.6
-set date=23/jan/24
+set build=8.7
+set date=26/jan/24
 set ano=2024
 set versao=Anti-Update do mal ver: %build% - %date%
 set obrigado=Obrigado por desinstalar o %versao%
@@ -18,7 +18,7 @@ set corel_block=corel.com apps.corel.com mc.corel.com
 set windows_block=mpa.one.microsoft.com  sls.microsoft.com  genuine.microsoft.com wat.microsoft.com mpa.microsoft.com searchclient.live.net office.microsoft.com watson.microsoft.com content.microsoft.com logging.microsoft.com windowsupdate.com download.windowsupdate.com download.microsoft.com ntservicepack.microsoft.com update.microsoft.com www.windowsupdate.com windowsupdate.microsoft.com www.windowsupdate.microsoft.com www.wustat.windows.com
 
 :: Variaveis definidas
-rename %0 "anti-update%build%.bat"
+rename %~f0 "anti-update%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
@@ -27,30 +27,29 @@ set opcao=0
 set vFlag_hosts=0
 set vFlag_registro=0
 set vFlag_completo=0
-set GWX=GWX nao instalado
+:: set GWX=GWX nao instalado
 FIND /C /I "#%versao%" %hostsfile%
 IF %ERRORLEVEL% NEQ 1 set instalado=esta instalado e atualizado.
 IF %ERRORLEVEL% NEQ 0 set instalado=nao instalado ou esta desatualizado.
 
-if exist "%systemroot%\system32\gwx\gwx.exe" set GWX=GWX instalado
-if exist "%systemroot%\system32\gwx\antigwx_by-llbranco.txt" set GWX=PROTEGIDO CONTRA GWX
-if "%gwx%"=="GWX instalado" (
-color 4f
-) 
+:: if exist "%systemroot%\system32\gwx\gwx.exe" set GWX=GWX instalado
+:: if exist "%systemroot%\system32\gwx\antigwx_by-llbranco.txt" set GWX=PROTEGIDO CONTRA GWX
+:: if "%gwx%"=="GWX instalado" (
+:: color 4f
+:: ) 
 cls
 echo -------------------------------------------------------------------------------
 echo    O %versao% %instalado%
-echo                          %GWX%
+:: echo                          %GWX%
+echo https://github.com/llbranco/scripts
 echo -------------------------------------------------------------------------------
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
 echo                    Projeto de Luciano Branco iniciado em 2013
 echo           O Anti-Update bloqueia atualizacao de: Windows, Corel e Adobe
-echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
 echo -------------------------------------------------------------------------------
 echo                               Selecione uma Opcao
 echo -------------------------------------------------------------------------------
-echo 1  - Instalar ou Atualizar o Bloqueio (Versao Completa) remove GWX
+echo 1  - Instalar ou Atualizar o Bloqueio (Versao Completa)
 echo 2  - Instalar ou Atualizar o Bloqueio (Apenas HOSTS)
 echo 3  - Instalar ou Atualizar o Bloqueio (Apenas Registro)
 echo 4  - Instalar ou Atualizar o Bloqueio (Apenas servicos)
@@ -70,18 +69,20 @@ echo ---------------------------------------------------------------------------
  If %opcao% equ 5 goto antiupdateuninstall
  If %opcao% equ 6 goto antiupdatesobre
  If %opcao% equ 7 goto antiupdateverhosts
- if %opcao% equ 8 goto antiupdategwx
+:: if %opcao% equ 8 goto antiupdategwx
 goto fim
 
 :: Definindo vFlags
 :antiupdatecompleto
 set vFlag_completo=1
-if exist %systemroot%\system32\gwx\gwx.exe (
-call %antiupdategwx%
-) else (
-echo %systemroot%\system32\gwx\gwx.exe nao encontrado
-echo update kb3035583 APARENTEMENTE nao instalado
-)
+:: GWX desativado visto que só era instalado nos sistemas xp, vista, 7, 8 e 8.1
+:: forçando um ads o usuario para instalar o windows 10 (get windows x/10)
+:: if exist %systemroot%\system32\gwx\gwx.exe (
+:: call %antiupdategwx%
+:: ) else (
+:: echo %systemroot%\system32\gwx\gwx.exe nao encontrado
+:: echo update kb3035583 APARENTEMENTE nao instalado
+::)
 goto antiupdate_avancar
 
 :antiupdatehosts
@@ -102,7 +103,6 @@ If %vFlag_completo%==1 goto antiupdatehosts
 :: ----------------------------------------- Liberanco permissões do arquivo -----------------------------------------
 echo liberando acesso ao arquivo HOSTS
 attrib -r -a -s -h %hostsfile%
-
 
 :: ------------------------------------------------ Cabeçalho do HOSTS -----------------------------------------------
 echo resetando o hosts
@@ -168,7 +168,7 @@ echo #%versao% -- fim
 
 If %vFlag_hosts%==1 goto menuprincipal
 If %vFlag_completo%==1 goto antiupdateregistro
-
+goto menuprincipal
 
 :antiupdateregistro
 echo modificando entradas do registro
@@ -204,6 +204,20 @@ echo.
 echo deletando arquivo temporario
 del %temp%\Anti-Update%build%.tmp
 
+:: pausa o windows update até 2077
+:: HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings\
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursEnd" /t REG_DWORD /d "00000014"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursStart" /t REG_DWORD /d "00000009"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "InsiderProgramEnabled" /t REG_DWORD /d "00000000"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PendingRebootStartTime" /t REG_SZ /d "2019-07-28T03:07:38Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseFeatureUpdatesStartTime" /t REG_SZ /d "2019-07-28T10:38:56Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseFeatureUpdatesEndTime" /t REG_SZ /d "2077-01-01T10:38:56Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseQualityUpdatesStartTime" /t REG_SZ /d "2019-07-28T10:38:56Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseQualityUpdatesEndTime" /t REG_SZ /d "2077-01-01T10:38:56Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseUpdatesStartTime" /t REG_SZ /d "2022-06-28T19:26:20Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseUpdatesExpiryTime" /t REG_SZ /d "2077-01-01T10:38:56Z"
+reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "FlightSettingsMaxPauseDays" /t REG_DWORD /d "1869f"
+
 If %vFlag_completo%==1 goto antiupdateservicos
 pause
 goto menuprincipal
@@ -211,15 +225,24 @@ goto menuprincipal
 
 :antiupdateservicos
 echo parando servicos responsaveis pelos updates do windows
+echo parando servico responsavel pela indexacao de pastas
 echo outros servicos "nao microsoft" nao serao finalizados
 
-sc config wuauserv start= disabled
-sc config BITS start= demand
+for %%a in (
+wuauserv
+BITS 
+wscsvc
+SharedAccess
+WSearch
+) do (
+echo parando o servico %%a
+sc stop %%a
+echo.
+)
 
-sc stop wuauserv
-sc stop BITS 
-sc stop wscsvc
-sc stop SharedAccess
+sc config wuauserv start= disabled
+sc config WSearch start= disabled
+sc config BITS start= demand
 
 If %vFlag_completo%==1 goto antiupdategwx
 pause
@@ -280,14 +303,20 @@ sc config wuauserv start= auto
 sc config BITS start= auto
 
 echo iniciando servicos
-sc start wuauserv
-sc start BITS
-sc start wscsvc
-sc start SharedAccess
+for %%a in (
+wuauserv
+BITS
+wscsvc
+SharedAccess
+) do (
+sc start %%a
+)
 
 goto menuprincipal
 
 :antiupdategwx
+:: desativado, adicionando um goto pro menu principal para evitar erros
+goto menuprincipal
 echo Desabilitando GWX - agradecimentos a CronAsatruar forum BatchSatti
 echo.
 if not exist %systemroot%\system32\gwx\gwx.exe echo *** AVISO ***     *** GWX NAO INSTALADO ***
@@ -392,22 +421,21 @@ goto menuprincipal
 :antiupdatesobre
 echo.&echo.&echo.
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bit
-echo           Foi testado e funciona perfeitamente do Windows XP ao 8.1
-echo      Foi testado e funciona perfeitamente do Windows 2000 ao 2012 server
+echo           Foi testado e funciona perfeitamente do Windows XP ao 12
+echo      Foi testado e funciona perfeitamente do Windows 2000 ao 2022 server
 echo.
 echo                    Projeto de Luciano Branco iniciado em 2013
 echo.
 echo           O Anti-Update bloqueia atualizacao de: Windows, Corel e Adobe
-echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestoes ou criticas: thelucianobranco@gmail.com
+echo           https://github.com/llbranco/scripts
 echo.&echo.&echo.
 pause
 echo O trabalho Anti-Update do mal de Luciano Branco
 echo está licenciado com uma Licença Creative Commons
 echo Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional.
-echo Baseado no trabalho disponível em http://trashcleaner.forumbrasil.net.
+echo Baseado no trabalho disponível em https://github.com/llbranco/scripts
 echo Podem estar disponíveis autorizações adicionais
-echo às concedidas no âmbito desta licença em http://trashcleaner.forumbrasil.net.
+echo às concedidas no âmbito desta licença em https://github.com/llbranco/scripts
 echo.&echo.&echo.
 pause
 goto menuprincipal
