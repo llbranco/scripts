@@ -1,7 +1,7 @@
 Windows Registry Editor Version 5.00
 
 ; https://github.com/llbranco
-; registry_optimizer_v1.0.reg
+; registry optimizer v1.1.reg
 ; created:		26/07/2024
 ; last update:	26/07/2024
 
@@ -26,11 +26,21 @@ Windows Registry Editor Version 5.00
 
 ;adiciona informações da loja na tela de sistema
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation]
-"Logo"="C:\\WINDOWS\\system32\\OEMlogo.bmp"
-“Manufacturer"="InfoBR Informática"
-“Model"="Microsoft"
-“SupportHours"="Seg/Sex 9 as 18hs - Sab 9 as 15hs"
-“SupportURL"="(24) 2222-0014"
+"Logo"="%SYSTEMROOT%\\system32\\oemlogo.bmp"
+"Manufacturer"="InfoBR"
+"Model"="InfoBR"
+"HelpCustomized"=dword:00000001
+"SupportHours"="Seg/Sex 9 as 18hs - Sab 9 as 15hs"
+"SupportPhone"="(24) 2222-0014"
+"SupportURL"="https://github.com/llbranco"
+; https://gist.github.com/PrplHaz4/61f152c866913aea764f48f74f5a33d3
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winsat\WindowsExperienceIndexOemInfo]
+"Logo"="%SYSTEMROOT%\\system32\\oemlogo.bmp"
+"HardwareUpgradeURL"="https://github.com/llbranco"
+
+; https://neemiascasa.ddns.net:8183/PROGRAMAS/Crack%20win%2011%20e%20office%202022%20-%202023/ativadores%202022/OEMLogos_svn10092022/OEMLogos/HP/
+
 
 ;habilita impressora no win10
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print]
