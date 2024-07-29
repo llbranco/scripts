@@ -1,9 +1,9 @@
 Windows Registry Editor Version 5.00
 
 ; https://github.com/llbranco
-; registry optimizer v1.1.reg
+; registry optimizer v1.2.reg
 ; created:		26/07/2024
-; last update:	26/07/2024
+; last update:	29/07/2024
 
 ; credits to the respective creators and links to them
 ; some of the lines contained here would not be possible without the help of this site
@@ -204,3 +204,13 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit]
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit]
+
+
+; attempt to remove onedrive
+; https://answers.microsoft.com/pt-br/msoffice/forum/all/preciso-urgentemente-de-ajuda-esta-aparecendo/7798fc95-95a2-4e51-84fa-b624de261e35
+[-HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
+; default value (just in case)
+; "System.IsPinnedToNameSpaceTree"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
+"OneDrive"=-
