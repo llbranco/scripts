@@ -31,7 +31,7 @@ Microsoft.DotNet.Runtime.6
 Microsoft.DotNet.Runtime.7
 Microsoft.DotNet.Runtime.8
 Microsoft.VCRedist.2005.x86
-Microsoft.VCRedist.2005.x86
+Microsoft.VCRedist.2005.x64
 Microsoft.VCRedist.2008.x86
 Microsoft.VCRedist.2008.x64
 Microsoft.VCRedist.2010.x86
