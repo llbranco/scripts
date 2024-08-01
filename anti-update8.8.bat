@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=8.7
-set date=26/jan/24
+set build=8.8
+set date=01/ago/24
 set ano=2024
 set versao=Anti-Update do mal ver: %build% - %date%
 set obrigado=Obrigado por desinstalar o %versao%
@@ -22,25 +22,36 @@ rename %~f0 "anti-update%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
+:: pasta $WinReAgent
+
 :menuprincipal
 set opcao=0
 set vFlag_hosts=0
 set vFlag_registro=0
 set vFlag_completo=0
-:: set GWX=GWX nao instalado
+set GWX=GWX nao instalado
+set RUXIM=RUXIM nao instalado
 FIND /C /I "#%versao%" %hostsfile%
 IF %ERRORLEVEL% NEQ 1 set instalado=esta instalado e atualizado.
 IF %ERRORLEVEL% NEQ 0 set instalado=nao instalado ou esta desatualizado.
 
-:: if exist "%systemroot%\system32\gwx\gwx.exe" set GWX=GWX instalado
-:: if exist "%systemroot%\system32\gwx\antigwx_by-llbranco.txt" set GWX=PROTEGIDO CONTRA GWX
-:: if "%gwx%"=="GWX instalado" (
-:: color 4f
-:: ) 
+if exist "%systemroot%\system32\gwx\gwx.exe" set GWX=GWX instalado
+if exist "%systemroot%\system32\gwx\antigwx_by-llbranco.txt" set GWX=PROTEGIDO CONTRA GWX
+if "%gwx%"=="GWX instalado" (
+color 4f
+)
+
+if exist "%programfiles%\RUXIM\DTUdriver.exe" set RUXIM=RUXIM instalado
+if exist "%programfiles%\RUXIM\antiRUXIM_by-llbranco.txt" set RUXIM=PROTEGIDO CONTRA RUXIM
+if "%RUXIM%"=="RUXIM instalado" (
+color 4f
+) 
+
 cls
 echo -------------------------------------------------------------------------------
 echo    O %versao% %instalado%
-:: echo                          %GWX%
+echo 	%GWX%
+echo 	%RUXIM%
 echo https://github.com/llbranco/scripts
 echo -------------------------------------------------------------------------------
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
@@ -56,7 +67,7 @@ echo 4  - Instalar ou Atualizar o Bloqueio (Apenas servicos)
 echo 5  - Desistalar e Reverter ao original (Updates voltam a funcionar)
 echo 6  - Sobre
 echo 7  - Abrir HOSTS no Bloco de Notas
-echo 8  - Remover GWX apenas (pode voltar se update estiver ativo)
+echo 8  - Remover GWX e RUXIM (Pop-up de update do WIN 11)
 echo -------------------------------------------------------------------------------
 
  Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -69,20 +80,30 @@ echo ---------------------------------------------------------------------------
  If %opcao% equ 5 goto antiupdateuninstall
  If %opcao% equ 6 goto antiupdatesobre
  If %opcao% equ 7 goto antiupdateverhosts
-:: if %opcao% equ 8 goto antiupdategwx
+ if %opcao% equ 8 goto antiupdategwx
 goto fim
 
 :: Definindo vFlags
 :antiupdatecompleto
 set vFlag_completo=1
-:: GWX desativado visto que só era instalado nos sistemas xp, vista, 7, 8 e 8.1
+:: GWX só era instalado nos sistemas xp, vista, 7, 8 e 8.1
 :: forçando um ads o usuario para instalar o windows 10 (get windows x/10)
-:: if exist %systemroot%\system32\gwx\gwx.exe (
-:: call %antiupdategwx%
-:: ) else (
-:: echo %systemroot%\system32\gwx\gwx.exe nao encontrado
-:: echo update kb3035583 APARENTEMENTE nao instalado
-::)
+if exist %systemroot%\system32\gwx\gwx.exe (
+call %antiupdategwx%
+) else (
+echo %systemroot%\system32\gwx\gwx.exe nao encontrado
+echo update kb3035583 APARENTEMENTE nao instalado
+)
+echo.
+:: RUXIM / DTU DRIVER / Reusable UX Interaction Manager
+:: é similar ao maldito GWX, e exibe pop-ups e ADS forçando o usuário a instalar o windows 11 
+if exist %programfiles%\RUXIM\DTUdriver.exe (
+call %antiupdategwx%
+) else (
+echo %programfiles%\RUXIM\DTUdriver.exe nao encontrado
+echo update kb5001716 APARENTEMENTE nao instalado
+)
+pause
 goto antiupdate_avancar
 
 :antiupdatehosts
@@ -227,6 +248,7 @@ goto menuprincipal
 echo parando servicos responsaveis pelos updates do windows
 echo parando servico responsavel pela indexacao de pastas
 echo outros servicos "nao microsoft" nao serao finalizados
+echo.
 
 for %%a in (
 wuauserv
@@ -316,11 +338,16 @@ goto menuprincipal
 
 :antiupdategwx
 :: desativado, adicionando um goto pro menu principal para evitar erros
-goto menuprincipal
-echo Desabilitando GWX - agradecimentos a CronAsatruar forum BatchSatti
+
+echo Baseado no script que desativa GWX - por CronAsatruar do forum BatchSatti
 echo.
 if not exist %systemroot%\system32\gwx\gwx.exe echo *** AVISO ***     *** GWX NAO INSTALADO ***
+if not exist %programfiles%\RUXIM\DTUDriver.exe echo *** AVISO ***     *** RUXIM NAO INSTALADO ***
 taskkill /f /im  GWX.exe
+taskkill /f /im  DTUDriver.exe
+taskkill /f /im  PlugScheduler.exe
+
+:: kb5001716 referente ao ruxim
 echo desinstalando hotfix do sistema
 for %%a in (
 3035583
@@ -347,7 +374,11 @@ for %%a in (
 3083325
 3083710
 3083711
+5001716
 ) do start "" wusa /uninstall /kb:%%a /quiet /norestart
+
+pause
+
 ECHO.
 echo finalizando processos e finalizando tarefas agendadas
 for %%x in (
@@ -365,6 +396,7 @@ OutOfIdle-5d
 OutOfSleep-5d
 Time-5d
 ) do (
+echo finalizando GWX %%a
 taskkill /f /IM gwx.exe
 taskkill /f /IM gwxux.exe
 taskkill /f /IM gwxuxworker.exe
@@ -372,43 +404,47 @@ schtasks /end /tn "microsoft\windows\setup\gwx\%%x"
 schtasks /end /tn "microsoft\windows\setup\GWXTriggers\%%x"
 schtasks /change /tn "microsoft\windows\setup\gwx\%%x" /DISABLE
 schtasks /change /tn "microsoft\windows\setup\GWXTriggers\%%x" /DISABLE
+echo.
 )
+echo.
+echo finalizando Ruxim
+schtasks /end /tn "microsoft\Windows\WindowsUpdate\RUXIM\PlugScheduler"
+schtasks /change /tn "microsoft\Windows\WindowsUpdate\RUXIM\PlugScheduler" /DISABLE
 ::taskschd.msc
 
-::criar proteção anti GWX
-echo iniciar protecao contra GWX
-if not exist "%systemroot%\system32\gwx" md "%systemroot%\system32\gwx"
-if not exist "%systemroot%\system32\gwx\download" md "%systemroot%\system32\gwx\download"
+:: proteção contra GWX não é mais necessaria visto que o proprio windows 10 está proximo ao fim da vida util
+:: if not exist "%systemroot%\system32\gwx" md "%systemroot%\system32\gwx"
+:: if not exist "%systemroot%\system32\gwx\download" md "%systemroot%\system32\gwx\download"
+
+::criar proteção anti RUXIM
+echo iniciar protecao contra RUXIM
+if not exist "%programfiles%\RUXIM" md "%programfiles%\RUXIM"
+
 
 ECHO.
-echo CRIANDO arquivos que teoricamente impediriam o GWX de ser instalados em seu PC
+echo CRIANDO arquivos que TEORICAMENTE impediriam o RUXIM de ser instalados em seu PC
 echo caso seja solicitado responda SIM
 
 for %%x in (
-config.cat
-config.xml
-detector.dat
-gstatus.ini
-gstatus32.sdb
-gstatus64.sdb
-gwx.exe
-gwxconfigmanager.exe
-gwxui.dll
-gwxux.exe
-gwxxworker.exe
-telemetrystore.xml
-telemetrystore.xml.lock
-antigwx_by-llbranco.txt
+DTUDRIVER.exe
+PlugScheduler.exe
+PlugScheduler.xml
+RuximICS.exe
+RuximIH.exe
+RuximPHDialogHandlers.dll
+SystemEvaluator.dll
+antiRUXIM_by-llbranco.txt
 ) do (
-fsutil file createnew "%systemroot%\system32\gwx\%%x" 1
-CACLS "%systemroot%\system32\gwx\%%x" /c /G "%UserName%":R
-CACLS "%systemroot%\system32\gwx\%%x" /c /E /R "%UserName%"
-CACLS "%systemroot%\system32\gwx\%%x" /c /P "%UserName%":N
-CACLS "%systemroot%\system32\gwx\%%x" /c /D "%UserName%"
-CACLS "%systemroot%\system32\gwx\%%x" /c /D "System"
-CACLS "%systemroot%\system32\gwx\%%x" /c /D "everyone"
-CACLS "%systemroot%\system32\gwx\%%x" /c /D "todos"
+fsutil file createnew "%programfiles%\RUXIM\%%x" 1
+CACLS "%programfiles%\RUXIM\%%x" /c /G "%UserName%":R
+CACLS "%programfiles%\RUXIM\%%x" /c /E /R "%UserName%"
+CACLS "%programfiles%\RUXIM\%%x" /c /P "%UserName%":N
+CACLS "%programfiles%\RUXIM\%%x" /c /D "%UserName%"
+CACLS "%programfiles%\RUXIM\%%x" /c /D "System"
+CACLS "%programfiles%\RUXIM\%%x" /c /D "everyone"
+CACLS "%programfiles%\RUXIM\%%x" /c /D "todos"
 )
+
 echo.
 echo processo terminado.
 echo agora sera solicitado que vc pressione qualquer tecla 3 vezes
