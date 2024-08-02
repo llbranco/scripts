@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=8.8
-set date=01/ago/24
+set build=8.8.1
+set date=02/ago/24
 set ano=2024
 set versao=Anti-Update do mal ver: %build% - %date%
 set obrigado=Obrigado por desinstalar o %versao%
@@ -203,11 +203,31 @@ echo definindo entradas propositalemten invalidas
 echo afim de proibir que o windows atualize
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "WUServer" /t REG_SZ /d "http://naoquerousarwindowsupdate.com:9999" /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "WUStatusServer" /t REG_SZ /d "http://naoquerousarwindowsupdate.com:9999" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f
+
+:: detectando a versão do windows
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
+:: 6.0 winVista | 6.1 Win7 | 6.2 Win8 | 6.3 Win 8.1 | 10.0 win10
+:: if "%version%" == "10.0" goto win10
+:: echo %version%
+
+if "%version%" == "10.0" (
+echo windows 10 detectado!
+echo instalando bloqueios adicionais na TENTATIVA de impediriam
+echo os pop-ups e ads do windows 11
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ProductVersion" /t REG_SZ /d "Windows 10" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "TargetReleaseVersion" /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "TargetReleaseVersionInfo" /t REG_SZ /d "22H2" /f
+)
+
 echo.
 echo proibindo que o usuario re-ative o Windows-Update
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "UseWUServer" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AUOptions" /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoRebootWithLoggedOnUsers" /t REG_DWORD /d 1 /f
+
+
 echo.
 echo alterando permissoes do registro
 echo ... ... ... ... ... ... ... ... ... ... ... ... ...
@@ -318,6 +338,10 @@ echo proibindo que o usuario re-ative o Windows-Update
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "UseWUServer" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AUOptions" /t REG_DWORD /d 4 /f
+
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ProductVersion" /t REG_SZ /d "Windows 10" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "TargetReleaseVersion" /t REG_DWORD /d 1 /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "TargetReleaseVersionInfo" /t REG_SZ /d "22H2" /f
 
 
 echo marcando servicos como inicializaveis
