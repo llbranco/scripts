@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.1
-set date=17/jul/24
+set build=1.1.2
+set date=12/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -12,7 +12,7 @@ set frs_log=%~dp0reparoboot.log
 if not exist "%frs_log%" echo arquivo de log criado em %date% - %time%>%frs_log%
 
 :: Variaveis definidas
-rename %0 "ferramenta_reparo_simples_v%build%.bat"
+rename %~f0 "ferramenta_reparo_simples_v%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
@@ -28,8 +28,8 @@ echo %linha%
 echo Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
 echo %linha%
-echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
-echo 2  - DISM /Online /Cleanup-image /RestoreHealth
+echo 1  - DISM limpar imagem
+echo 2  - DISM limpar updates (usar op 1 antes)
 echo 3  - SFC /Scannow
 echo 4  - Reparar Boot / BCD
 echo 5  - Reiniciar para BIOS/UEFI
@@ -62,14 +62,23 @@ DISM /online /Cleanup-Image /StartComponentCleanup
 ::)
 @echo off
 pause
-goto menuprincipal
-
-:op2
 echo.>>%frs_log%
 echo executando "DISM /Online /Cleanup-image /RestoreHealth" >>%frs_log%
 @echo on
 ::for /f "delims=" %%i in (
 DISM /Online /Cleanup-image /RestoreHealth
+::) do (
+::    echo [%date%, %time%] %%i >> %frs_log%
+::)
+@echo off
+goto menuprincipal
+
+:op2
+echo.>>%frs_log%
+echo executando "Dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase" >>%frs_log%
+@echo on
+::for /f "delims=" %%i in (
+Dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 ::) do (
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
