@@ -1,6 +1,3 @@
-deseja ver uma versão mais bonita desta página?
-acesse >>  http://llbranco.github.io/scripts/
-
 para instalar winget
 ```https://github.com/kkaminsk/Install-Winget/tree/main```
 
@@ -18,15 +15,6 @@ mas todo o código foi escrito para ser limpo e livre de ameaças.
 você é livre para distribuir, editar, compartilhar desde que mantenha os créditos ao criador e inclua meu email e link do github
 remover os creditos é violação de direitos e visto que a ferramenta é de livre distribuição seria de muita grosseiria.
 se violar os meus direitos de autor moverei uma ação judicial contra sua pessoa!
-
-Obrigado por usar meus scripts,
-caso um deles tenha lhe ajudado me mande um email agradescendo
-caso tenha sugestões, criticas ou reclamações envie um email se expressando
-caso queira me dar um apoio para que eu continue criando mais scripts combine os detalhes para um doação para meu email
-
-Luciano Branco
-llbranco
-thelucianobrando@gmail.com
 
 #Trash Cleaner
 Removedor de arquivos temporários
@@ -52,3 +40,4 @@ Set-ExecutionPolicy Unrestricted -Scope CurrentUser
 
 para desbloquear scripts recursivamente
 PS> ls -Recurse *.ps*1 | Unblock-File
+
