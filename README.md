@@ -1,6 +1,10 @@
 deseja ver uma versão mais bonita desta página?
 acesse >>  http://llbranco.github.io/scripts/
 
+para instalar winget
+```https://github.com/kkaminsk/Install-Winget/tree/main```
+
+
 # coletânea de scripts de minha autoria
 
 todos os scripts aqui contidos são estáveis e seguros.
