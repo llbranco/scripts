@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.2
-set date=12/ago/24
+set build=1.1.3
+set date=16/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -28,8 +28,8 @@ echo %linha%
 echo Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
 echo %linha%
-echo 1  - DISM limpar imagem
-echo 2  - DISM limpar updates (usar op 1 antes)
+echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
+echo 2  - DISM /Online /Cleanup-image /RestoreHealth
 echo 3  - SFC /Scannow
 echo 4  - Reparar Boot / BCD
 echo 5  - Reiniciar para BIOS/UEFI
@@ -40,6 +40,9 @@ echo 9  - Arquivo de log (%frs_log%)
 echo A  - Remover/ejetar unidade
 echo B  - Powershell
 echo C  - Mudar Perfil de energia
+echo D  - desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
+echo E  - backup wifi
+echo F  - habilitar GPEDIT.MSC (para Win Home e SL)
 echo 0  - Sair                                           https://github.com/llbranco
 echo %linha%
 echo O arquivo de log sera criado na pasta onde o script esta sendo executado
@@ -62,23 +65,14 @@ DISM /online /Cleanup-Image /StartComponentCleanup
 ::)
 @echo off
 pause
+goto menuprincipal
+
+:op2
 echo.>>%frs_log%
 echo executando "DISM /Online /Cleanup-image /RestoreHealth" >>%frs_log%
 @echo on
 ::for /f "delims=" %%i in (
 DISM /Online /Cleanup-image /RestoreHealth
-::) do (
-::    echo [%date%, %time%] %%i >> %frs_log%
-::)
-@echo off
-goto menuprincipal
-
-:op2
-echo.>>%frs_log%
-echo executando "Dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase" >>%frs_log%
-@echo on
-::for /f "delims=" %%i in (
-Dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 ::) do (
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
@@ -288,6 +282,40 @@ powercfg -setactive e9a42b02-d5df-448d-aa00-03f14749eb61
 powercfg /changename e9a42b02-d5df-448d-aa00-03f14749eb61 "InfoBR"
 echo .
 %windir%\System32\control.exe powercfg.cpl
+pause
+goto menuprincipal
+
+:opd
+echo desabilitando estampa de ultimo acessodos arquivos
+echo.
+echo isso melhora o tempo de acesso especialmente em HD
+echo ou SSD barato
+fsutil.exe behavior set disableLastAccess 1
+pause
+goto menuprincipal
+
+:ope
+echo exportando wifi para arquivo xml
+echo.
+netsh.exe wlan show profiles
+netsh.exe wlan export profile key=clear
+pause
+goto menuprincipal
+
+:opf
+echo habilitando GPEDIT
+dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >"%temp%\List.txt "
+dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>"%temp%\List.txt "
+
+for /f %%i in ('findstr /i . "%temp%\List.txt" 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i" 
+echo.
+echo.
+echo para habilitar tela de logon no win 8, 8.1, 10 e 11
+echo utilize esse metodo:
+echo.
+echo 1. Clique no iniciar, no campo pesquisa digite: gpedit.msc, e abra o mesmo.
+echo 2. Abra o caminho Configuracao do Computador, Modelo Administrativo, Sistema, Logon.
+echo 3. Clique duas vezes em "Sempre Usar Logon Classico, selecione "Habilitar" e clique em Ok.
 pause
 goto menuprincipal
 
