@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.3
-set date=16/ago/24
+set build=1.1.4
+set date=22/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -40,9 +40,10 @@ echo 9  - Arquivo de log (%frs_log%)
 echo A  - Remover/ejetar unidade
 echo B  - Powershell
 echo C  - Mudar Perfil de energia
-echo D  - desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
-echo E  - backup wifi
-echo F  - habilitar GPEDIT.MSC (para Win Home e SL)
+echo D  - Desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
+echo E  - Backup wi-fi
+echo F  - Habilitar GPEDIT.MSC (para Win Home e SL)
+echo S  - Verificar S.M.A.R.T.
 echo 0  - Sair                                           https://github.com/llbranco
 echo %linha%
 echo O arquivo de log sera criado na pasta onde o script esta sendo executado
@@ -316,6 +317,11 @@ echo.
 echo 1. Clique no iniciar, no campo pesquisa digite: gpedit.msc, e abra o mesmo.
 echo 2. Abra o caminho Configuracao do Computador, Modelo Administrativo, Sistema, Logon.
 echo 3. Clique duas vezes em "Sempre Usar Logon Classico, selecione "Habilitar" e clique em Ok.
+pause
+goto menuprincipal
+
+:ops
+wmic diskdrive get model,name,serialnumber,status
 pause
 goto menuprincipal
 
