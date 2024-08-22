@@ -28,7 +28,7 @@ echo %linha%
 echo Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
 echo %linha%
-echo 1  - Limpezas/correções usando DISM
+echo 1  - Limpezas/correcoes usando DISM
 echo 2  - Pular requisitos do windows 11
 echo 3  - SFC /Scannow
 echo 4  - Reparar Boot / BCD
@@ -54,7 +54,9 @@ echo Arquivo de log: %frs_log% & echo.
  Cls
  If %opcao% equ 0 goto fim
  goto op%opcao%
-goto fim
+ echo vc escolheu a opcao %opcao%
+ pause
+goto menuprincipal
 
 :op1
 echo %linha%
