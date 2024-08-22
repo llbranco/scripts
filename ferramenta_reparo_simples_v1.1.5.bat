@@ -2,7 +2,7 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.4
+set build=1.1.5
 set date=22/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
@@ -28,8 +28,8 @@ echo %linha%
 echo Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
 echo %linha%
-echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
-echo 2  - DISM /Online /Cleanup-image /RestoreHealth
+echo 1  - Limpezas/correções usando DISM
+echo 2  - Pular requisitos do windows 11
 echo 3  - SFC /Scannow
 echo 4  - Reparar Boot / BCD
 echo 5  - Reiniciar para BIOS/UEFI
@@ -43,6 +43,7 @@ echo C  - Mudar Perfil de energia
 echo D  - Desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
 echo E  - Backup wi-fi
 echo F  - Habilitar GPEDIT.MSC (para Win Home e SL)
+echo G  - Desabilitar UAC
 echo S  - Verificar S.M.A.R.T.
 echo 0  - Sair                                           https://github.com/llbranco
 echo %linha%
@@ -56,6 +57,23 @@ echo Arquivo de log: %frs_log% & echo.
 goto fim
 
 :op1
+echo %linha%
+echo Selecione a opcao desejada
+echo %linha%
+echo.
+echo opcoes 1 e 2 executam limpezas no windows
+echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
+echo 2  - DISM /Online /Cleanup-image /RestoreHealth
+echo 3  - Desabilitar espaco reservado win10/11
+echo 4  - Habilitar   espaco reservado win10/11
+set dism=
+ Set /P dism= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
+ Cls
+ If %dism% equ 0 goto fim
+ goto dism%dism%
+goto fim
+
+:dism1
 echo.>>%frs_log%
 echo executando "DISM /online /Cleanup-Image /StartComponentCleanup" >>%frs_log%
 @echo on
@@ -68,7 +86,7 @@ DISM /online /Cleanup-Image /StartComponentCleanup
 pause
 goto menuprincipal
 
-:op2
+:dism2
 echo.>>%frs_log%
 echo executando "DISM /Online /Cleanup-image /RestoreHealth" >>%frs_log%
 @echo on
@@ -78,6 +96,35 @@ DISM /Online /Cleanup-image /RestoreHealth
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
 @echo off
+pause
+goto menuprincipal
+
+:dism3
+echo.>>%frs_log%
+echo executando "DISM /Online /Set-ReservedStorageState /State:Disabled​" >>%frs_log%
+@echo on
+DISM /Online /Set-ReservedStorageState /State:Disabled​
+@echo off
+pause
+goto menuprincipal
+
+:dism4
+echo.>>%frs_log%
+echo executando "DISM /Online /Set-ReservedStorageState /State:Enable​" >>%frs_log%
+@echo on
+DISM /Online /Set-ReservedStorageState /State:Enable​
+@echo off
+pause
+goto menuprincipal
+
+:op2
+@echo off
+reg add HKLM\System\Setup\LabConfig /v BypassTPMCheck /t reg_dword /d 0x00000001 /f
+reg add HKLM\System\Setup\LabConfig /v BypassSecureBootCheck /t reg_dword /d 0x00000001 /f
+reg add HKLM\System\Setup\LabConfig /v BypassRAMCheck /t reg_dword /d 0x00000001 /f
+reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f
+reg add HKLM\System\Setup\LabConfig /v BypassCPUCheck /t reg_dword /d 0x00000001 /f
+pause
 goto menuprincipal
 
 :op3
@@ -317,6 +364,13 @@ echo.
 echo 1. Clique no iniciar, no campo pesquisa digite: gpedit.msc, e abra o mesmo.
 echo 2. Abra o caminho Configuracao do Computador, Modelo Administrativo, Sistema, Logon.
 echo 3. Clique duas vezes em "Sempre Usar Logon Classico, selecione "Habilitar" e clique em Ok.
+pause
+goto menuprincipal
+
+:opg
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d "1" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f
 pause
 goto menuprincipal
 
