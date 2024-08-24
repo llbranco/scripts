@@ -34,9 +34,12 @@ em breve mais scripts e uma melhor descrição
 
 
 para permitir que script ps1 seja executado, use:
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+```Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force```
+("-scrope process" limita apenas a janela de prompt atual, sem esse scope process ps1 fica desbloqueado)
 ou
-Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+```Set-ExecutionPolicy Unrestricted -Scope CurrentUser```
+(apenas para o usuário atual)
+
 
 para desbloquear scripts recursivamente
 PS> ls -Recurse *.ps*1 | Unblock-File
