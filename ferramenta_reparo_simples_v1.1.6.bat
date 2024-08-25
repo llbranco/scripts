@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.5
-set date=22/ago/24
+set build=1.1.6
+set date=25/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -35,10 +35,10 @@ echo 4  - Reparar Boot / BCD
 echo 5  - Reiniciar para BIOS/UEFI
 echo 6  - CHKDSK /F/V/R/X X: (SELECIONE A UNIDADE)
 echo 7  - Sobre
-echo 8  - Abrir janelas cmd e notepad
+echo 8  - Abrir janelas cmd, powershell e notepad
 echo 9  - Arquivo de log (%frs_log%)
 echo A  - Remover/ejetar unidade
-echo B  - Powershell
+echo B  - Converter sistema EFI2BIOS e BIOS2EFI
 echo C  - Mudar Perfil de energia
 echo D  - Desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
 echo E  - Backup wi-fi
@@ -256,6 +256,7 @@ goto menuprincipal
 :op8
 start "" cmd
 start "" notepad
+start "" powershell.exe
 goto menuprincipal
 
 :op9
@@ -286,10 +287,57 @@ if "%ERRORLEVEL%"=="1" (
   pause
 )
 del /F %tempfile%
+pause
 goto menuprincipal
 
 :opb
-start "" powershell.exe
+echo converter uma instalacao de BIOS pra UEFI ou vice-versa
+echo.
+echo escolha uma opcao
+echo 1 - converter o sistema que estou logado de BIOS(MBR) para UEFI(GPT)
+echo 2 - BIOS para UEFI usando disco de recuperacao ou instalacao (win10 ou 11)
+echo 3 - converter de UEFI para BIOS
+ Set /P mbr2gpt= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
+ Cls
+ If %mbr2gpt% equ 0 goto fim
+ goto mbr2gpt%mbr2gpt%
+ echo vc escolheu a opcao %mbr2gpt%
+ pause
+goto menuprincipal
+
+:mbr2gpt1
+echo vc escolheu a opcao de converter o seu sistema atualmente instalado
+echo supostamente BIOS/MBR para UEFI/GPT
+echo.
+echo confirme 2x para continar ou feche para cancelar
+pause
+pause
+mbr2gpt.exe /convert /allowfullOS
+pause
+goto menuprincipal
+
+:mbr2gpt2
+echo vc escolheu a opcao de converter o seu sistema via recovery ou disco de instacao
+echo supostamente BIOS/MBR para UEFI/GPT
+echo.
+echo confirme 2x para continar ou feche para cancelar
+pause
+pause
+mbr2gpt.exe /validate
+mbr2gpt.exe /convert
+pause
+
+:mbr2gpt3
+echo por enquanto ainda nao consigui uma forma segura de fazer isso via Batch
+echo sendo assim
+echo.
+echo recomendo usar um dos softwares abaixo para converter seu sistema:
+echo EaseUS Partititon Master
+echo ou
+echo Disk Genius
+echo.
+echo use a opcao "converter disco para MBR"
+pause
 goto menuprincipal
 
 :opc
