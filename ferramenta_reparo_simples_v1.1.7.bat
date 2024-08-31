@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.6
-set date=25/ago/24
+set build=1.1.7
+set date=31/ago/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ echo.>>%frs_log%
 echo Executando reparo de sfc /scannow na unidade %unidade%: >> %frs_log%
 @echo on
 ::for /f "delims=" %%i in (
-sfc /scannow /offbootdir=e:\ /offwindir=%unidade%:\Windows
+sfc /scannow /offbootdir=%unidade%:\ /offwindir=%unidade%:\Windows
 ::) do (
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
