@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.7
-set date=31/ago/24
+set build=1.1.8
+set date=22/out/24
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -20,12 +20,8 @@ title  %versao% -- %ano% -- By: llbranco
 set opcao=0
 cls
 echo %linha%
-echo    O %versao% %instalado%
-echo %linha%
-echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
-echo           Ferramenta para executar reparos simples no windows
-echo %linha%
-echo Instalacao do windows: %windir%
+echo 	%versao% %instalado%
+echo 	Instalacao do windows: %windir%
 echo                               Selecione uma Opcao
 echo %linha%
 echo 1  - Limpezas/correcoes usando DISM
@@ -44,10 +40,10 @@ echo D  - Desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
 echo E  - Backup wi-fi
 echo F  - Habilitar GPEDIT.MSC (para Win Home e SL)
 echo G  - Desabilitar UAC
+echo H  - Habilitar/Desabilitar menu F8 no windows
 echo S  - Verificar S.M.A.R.T.
 echo 0  - Sair                                           https://github.com/llbranco
 echo %linha%
-echo O arquivo de log sera criado na pasta onde o script esta sendo executado
 echo Arquivo de log: %frs_log% & echo.
 
  Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -423,6 +419,63 @@ Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v 
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f
 pause
 goto menuprincipal
+
+:oph
+cls
+set bootmenu=0
+echo Escolha uma opcao para editar o menu F8
+echo.
+echo NOTE QUE SO FUNCIONA COM FASTBOOT DESABILITADO
+echo.
+echo 1 Habilitar	displaybootmenu (para 30seg antes de iniciar o windows)
+echo 2 Desabilitar	displaybootmenu (default)
+echo.
+echo 3 Habilitar	bootmenupolicy	(habilita o F8)
+echo 4 Desabilitar	bootmenupolicy	(desabilita o F8)
+echo.
+echo 5 Entrar no modo recovery
+echo 0 VOLTAR
+echo.
+ Set /P bootmenu= Digite o nome do perfil que deseja [ENTER] para fechar: 
+ Cls
+ If %bootmenu% equ 0 goto menuprincipal
+ If %bootmenu% equ 1 goto oph1
+ if %bootmenu% equ 2 goto oph2
+ If %bootmenu% equ 3 goto oph3
+ If %bootmenu% equ 4 goto oph4
+ If %bootmenu% equ 5 goto oph5
+ 
+goto oph
+
+:oph1
+echo habilitando displaybootmenu
+bcdedit /set {bootmgr} displaybootmenu yes
+pause
+goto oph
+
+:oph2
+echo desabilitando displaybootmenu
+bcdedit /set {bootmgr} displaybootmenu no
+pause
+goto oph
+
+:oph3
+echo habilitando bootmenupolicy
+bcdedit /set {current} bootmenupolicy Legacy
+pause
+goto oph
+
+:oph4
+echo desabilitando bootmenupolicy
+bcdedit /set {current} bootmenupolicy Standard
+pause
+goto oph
+
+:oph5
+echo acessando o menu recovery
+shutdown /r /o /f /t 00
+pause
+goto oph
 
 :ops
 wmic diskdrive get model,name,serialnumber,status
