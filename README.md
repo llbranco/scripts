@@ -57,3 +57,5 @@ reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /f /v AllowUpgradesWithUnsupportedTPMOrC
 Set-SmbClientConfiguration -RequireSecuritySignature $false
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" RequireSecureNegotiate -Value 0 -Force
 
+### Links úteis
+[image2cpp](https://javl.github.io/image2cpp/)
