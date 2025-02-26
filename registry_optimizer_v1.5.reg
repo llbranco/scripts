@@ -1,9 +1,9 @@
 Windows Registry Editor Version 5.00
 
 ; https://github.com/llbranco
-; registry optimizer v1.2.reg
+; registry optimizer v1.5.reg
 ; created:		26/07/2024
-; last update:	29/07/2024
+; last update:	26/02/2025
 
 ; credits to the respective creators and links to them
 ; some of the lines contained here would not be possible without the help of this site
@@ -24,7 +24,7 @@ Windows Registry Editor Version 5.00
 ; pausa por 9999 dias
 "FlightSettingsMaxPauseDays"=dword:1869f
 
-;adiciona informações da loja na tela de sistema
+; adiciona informações da loja na tela de sistema
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation]
 "Logo"="%SYSTEMROOT%\\system32\\oemlogo.bmp"
 "Manufacturer"="InfoBR"
@@ -42,9 +42,18 @@ Windows Registry Editor Version 5.00
 ; https://neemiascasa.ddns.net:8183/PROGRAMAS/Crack%20win%2011%20e%20office%202022%20-%202023/ativadores%202022/OEMLogos_svn10092022/OEMLogos/HP/
 
 
-;habilita impressora no win10
+; remove marca d'agua de ativação
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"PaintDesktopVersion"=dword:00000000
+
+
+; habilita impressora no win10
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print]
 "RpcAuthnLevelPrivacyEnabled"=dword:00000000
+
+; desabilitar acesso remoto RDP
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance]
+"fAllowToGetHelp"=dword:00000000
 
 ; desabilitar a criação de conta microsoft para novos usuários
 ; Created by: Shawn Brink on: March 25, 2024
@@ -93,6 +102,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
 "RotatingLockScreenOverlayEnabled"=dword:00000000
 "SubscribedContent-338387Enabled"=dword:00000000
+"SilentInstalledAppsEnabled"=dword:00000000
 
 ; Show suggested content in Settings app
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
@@ -127,6 +137,68 @@ Windows Registry Editor Version 5.00
 ; Show Microsoft account-related notifications on Start Menu
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "Start_AccountNotifications"=dword:00000000
+
+; optimization around Edge
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Edge]
+"StandaloneHubsSidebarEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"StandaloneHubsSidebarEnabled"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Edge]
+"DefaultBrowserSettingEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"DefaultBrowserSettingEnabled"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Edge]
+"LocalBrowserDataShareEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"LocalBrowserDataShareEnabled"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Edge]
+"DiagnosticData"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"DiagnosticData"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Edge]
+"StartupBoostEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"StartupBoostEnabled"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications]
+"GlobalUserDisabled"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications]
+"GlobalUserDisabled"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search]
+"BackgroundAppGlobalToggle"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Search]
+"BackgroundAppGlobalToggle"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy]
+"LetAppsRunInBackground"=dword:00000002
+"LetAppsRunInBackground_UserInControlOfTheseApps"=-
+"LetAppsRunInBackground_ForceAllowTheseApps"=-
+"LetAppsRunInBackground_ForceDenyTheseApps"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy]
+"LetAppsRunInBackground"=dword:00000002
+"LetAppsRunInBackground_UserInControlOfTheseApps"=-
+"LetAppsRunInBackground_ForceAllowTheseApps"=-
+"LetAppsRunInBackground_ForceDenyTheseApps"=-
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Edge]
+"BackgroundModeEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"BackgroundModeEnabled"=dword:00000000
 
 ; fazendo uma limpeza no registro
 [HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify]
