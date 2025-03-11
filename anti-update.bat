@@ -17,9 +17,8 @@ set corel_block=corel.com apps.corel.com mc.corel.com
 :: para uma lista de bloqueio mais efetiva consulte https://github.com/hagezi/dns-blocklists#native
 set windows_block=mpa.one.microsoft.com sls.microsoft.com genuine.microsoft.com wat.microsoft.com mpa.microsoft.com searchclient.live.net office.microsoft.com watson.microsoft.com content.microsoft.com logging.microsoft.com windowsupdate.com download.windowsupdate.com download.microsoft.com ntservicepack.microsoft.com update.microsoft.com www.windowsupdate.com windowsupdate.microsoft.com www.windowsupdate.microsoft.com www.wustat.windows.com
 
-
 :: Variaveis definidas
-rename %~f0 "anti-update%build%.bat"
+::rename %~f0 "anti-update%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
