@@ -792,7 +792,7 @@ goto:eof
 	set ok=_por cento concluido
 	set opcao=
 	
-	rename "%~f0" "TrashCleaner_%vVersao%.bat"
+::rename "%~f0" "TrashCleaner_%vVersao%.bat"
 	
 goto menu
 
