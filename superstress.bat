@@ -21,7 +21,7 @@ color 17
 	set stressping2=50
 	set script=%TMP%\superstress
 	
-	rename %0 "SuperStress%vVersao%.bat"
+::rename %0 "SuperStress%vVersao%.bat"
 
 :menu
 title %newtitle%
