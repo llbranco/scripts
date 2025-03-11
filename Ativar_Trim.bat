@@ -15,7 +15,7 @@ set date=24/jul/2024
 set ano=2024
 set versao=Ativar Trim para SSD: %build% - %date%
 set linha================================================================================
-rename %0 "Ativar_Trim_v%build%.bat"
+::rename %0 "Ativar_Trim_v%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
