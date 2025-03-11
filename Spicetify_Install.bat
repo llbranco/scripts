@@ -10,7 +10,7 @@ set obrigado=Obrigado por instalar o %versao%
 set pasta="%homepath%\spicetify"
 set ps1="%pasta%\spicetify.ps1"
 
-rename %0 "Spicetify_Install%build%.bat"
+::rename %0 "Spicetify_Install%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
