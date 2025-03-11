@@ -2,12 +2,13 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.5
-set date=12/set/24
-set ano=2024
+set build=1.6
+set date=11/mar/25
+set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 
-rename %~f0 "Instalador_util_v%build%.bat"
+::reiniciar não será mais necessario para fins de compatibilidade com irm/wget
+::rename %~f0 "Instalador_util_v%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
@@ -31,18 +32,17 @@ if %errorlevel%==0 (
     echo Winget já está instalado. Pulando o download.
     goto next
 ) else (
-    echo Winget não encontrado. Iniciando o download do instalador...
-    set DOWNLOAD_URL=https://aka.ms/getwinget
-    set FILE_NAME=Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-    set DOWNLOAD_DIR=%USERPROFILE%\Downloads
-    echo Baixando o instalador do Winget...
-    powershell -Command "Invoke-WebRequest -Uri '%DOWNLOAD_URL%' -OutFile '%DOWNLOAD_DIR%\%FILE_NAME%'"
-    if exist "%DOWNLOAD_DIR%\%FILE_NAME%" (
-        echo Download concluído com sucesso.
-    ) else (
-        echo Erro no download do arquivo.
-        exit /b 1
-    )
+    echo instalando nuget
+powershell.exe -NoLogo -command "&{Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted}"
+echo.
+echo baixando script de instalacao do winget
+powershell.exe -NoLogo -command "&{Install-Script -Name winget-install -Force}"
+echo.
+echo permitindo execucao de script
+powershell.exe -NoLogo -command "&{Set-ExecutionPolicy Unrestricted}"
+echo.
+echo instalando winget
+powershell.exe -NoLogo -command "&{winget-install.ps1}"
 )
 
 echo Iniciando a instalação do Winget...
@@ -104,6 +104,7 @@ winget install -e --id %%a --verbose
 echo.&echo.&echo.
 )
 
+title  %versao% -- %ano% -- By: llbranco
 
 echo.
 echo ativando winrar
@@ -139,7 +140,7 @@ pause
 echo instalando o avast
 winget install -e --id XPDNZJFNCR1B07 --verbose
 
-echo importando configuracao do avast
-start "" avast.avastconfig
+::echo importando configuracao do avast
+::start "" avast.avastconfig
 pause
 goto :eof
