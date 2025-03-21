@@ -1,0 +1,6 @@
+dism -h
+
+dism /capture-image -h
+
+You will need to edit this command to your drives:
+dism.exe /capture-image /ImageFile:"c:\install.wim" /CaptureDir:f:\ /Name:win10_pro_apps /compress:max
