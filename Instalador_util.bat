@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.6
-set date=11/mar/25
+set build=1.7
+set date=28/mar/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 
@@ -51,7 +51,7 @@ powershell -Command "Add-AppxPackage -Path '%DOWNLOAD_DIR%\%FILE_NAME%'"
 :next
 echo O Winget está pronto para ser usado. Continuando o processo...
 
-echo desabilitando o Windows Recall
+echo tentativa de desabilitar o Windows Recall
 reg add HKLM\SOFTWARE\Microsoft\PolicyManager\default\WindowsAI\TurnOffWindowsCopilot /t REG_DWORD /v value /d 1 /f
 
 reg add HKLM\SOFTWARE\Microsoft\PolicyManager\default\WindowsAI\DisableAIDataAnalysis /t REG_DWORD /v value /d 1 /f
@@ -64,9 +64,26 @@ reg add HKLM\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnaly
 
 reg add HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot /v TurnOffWindowsCopilot /t REG_DWORD /d 1 /f
 
-Dism /Online /Disable-Feature /Featurename:Recall
+echo tentativa adicional de desativar recall
+Dism /Online /Disable-Feature /Featurename:"Recall"
 
+echo instalando dotnet 3.5, 3 e 2
+Dism /online /Enable-Feature /FeatureName:"NetFx3"
 
+echo removendo onedrive padrao do Windows
+set x86="%SystemRoot%\System32\OneDriveSetup.exe"
+set x64="%SystemRoot%\SysWOW64\OneDriveSetup.exe"
+
+taskkill /f /im OneDrive.exe >nul 2>&1
+ping 127.0.0.1 -n 5 >nul 2>&1
+if exist %x64% (
+  %x64% /uninstall
+) else (
+  %x86% /uninstall
+)
+::winget uninstall OneDriveSetup.exe
+
+:: revomido Adobe.Acrobat.Reader.64-bit e adicionado onedrive
 for %%a in (
 Google.Chrome
 Mozilla.Firefox
@@ -77,8 +94,9 @@ WinRAR.ShellExtension_d9ma7nkbkv4rp
 Unchecky.Unchecky
 Microsoft.DirectX
 AnyDeskSoftwareGmbH.AnyDesk
-Adobe.Acrobat.Reader.64-bit
 Oracle.JavaRuntimeEnvironment
+Microsoft.OneDrive
+Microsoft.DotNet.Runtime.3
 Microsoft.DotNet.Runtime.3_1
 Microsoft.DotNet.Runtime.4
 Microsoft.DotNet.Runtime.5
