@@ -2,10 +2,11 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.7
-set date=28/mar/25
+set build=1.8
+set date=03/abr/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
+set linha= ===============================================================================
 
 ::reiniciar não será mais necessario para fins de compatibilidade com irm/wget
 ::rename %~f0 "Instalador_util_v%build%.bat"
@@ -25,8 +26,87 @@ cls
 goto :eof
 
 :payload
+echo %linha%
+echo .. %versao% -- By: llbranco ..
+echo %linha%
+echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
+echo           https://github.com/llbranco
+echo %linha%
+echo.
+echo                               Selecione uma Opcao
+echo.
+echo %linha%
+echo	 1  - Instalar util
+echo	 2  - Ativadores (online)
+echo	 3  - Winutil (ChrisTitus)
+echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
+echo %linha%
+echo.
+	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
+	Cls
+ If %opcao% equ 0 goto fim
+ goto op%opcao%
+goto fim
 
-rem Verificar se o comando "winget" existe
+
+:op2
+Cls
+echo %linha%
+echo.
+echo qual ativador deseja usar?
+echo.
+echo %linha%
+echo	 1  - KMS VL ALL
+echo	 2  - MAS activator (MassGrave)
+echo	 3  - menu anterior
+echo.
+	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
+	Cls
+ If %opcao% equ 0 goto fim
+ goto at%opcao%
+goto fim
+
+:at1
+echo KMS VL All
+cd %temp%
+powershell.exe -NoLogo -Command "&{Invoke-RestMethod https://raw.githubusercontent.com/abbodi1406/KMS_VL_ALL_AIO/master/KMS_VL_ALL_AIO.cmd -OutFile 'KMS_VL_ALL_AIO.cmd'}"
+if exist "%TEMP%\KMS_VL_ALL_AIO.cmd" (
+    call "%TEMP%\KMS_VL_ALL_AIO.cmd"
+) else (
+    echo Erro: O arquivo não foi baixado corretamente!
+)
+pause
+goto payload
+
+:at2
+echo MassGrave activator
+powershell.exe -NoLogo -command "&{irm https://get.activated.win | iex}"
+pause
+goto payload
+
+:at3
+goto payload
+
+:op3
+echo winutil christitus
+powershell.exe -NoLogo -command "&{irm "https://christitus.com/win" | iex}"
+pause
+goto payload
+
+:op4
+echo Desabilitando a assinatura de segurança SMB
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v RequireSecureNegotiate /t REG_DWORD /d 0 /f
+echo reinicie o computador para aplicar as alteracoes
+pause
+goto payload
+
+
+:op1
+echo abrindo a microsoft store para atualizar
+start ms-windows-store://pdp/?productid=9WZDNCRFHV7C
+pause
+
+echo Verificar se o comando "winget" existe
 where winget >nul 2>nul
 if %errorlevel%==0 (
     echo Winget já está instalado. Pulando o download.
@@ -45,7 +125,7 @@ echo instalando winget
 powershell.exe -NoLogo -command "&{winget-install.ps1}"
 )
 
-echo Iniciando a instalação do Winget...
+echo Iniciando a instalacao do Winget...
 powershell -Command "Add-AppxPackage -Path '%DOWNLOAD_DIR%\%FILE_NAME%'"
 
 :next
@@ -66,6 +146,15 @@ reg add HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot /v TurnOffWindow
 
 echo tentativa adicional de desativar recall
 Dism /Online /Disable-Feature /Featurename:"Recall"
+
+echo habilitar impressora windows 10 e 11
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Print" /v RpcAuthnLevelPrivacyEnabled /t REG_DWORD /d 0 /f
+
+
+echo Mudando a associacao de URL http e https para o Chrome
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" /v ProgId /t REG_SZ /d "ChromeHTML" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" /v ProgId /t REG_SZ /d "ChromeHTML" /f
+
 
 echo instalando dotnet 3.5, 3 e 2
 Dism /online /Enable-Feature /FeatureName:"NetFx3"
