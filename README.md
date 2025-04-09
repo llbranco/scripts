@@ -68,4 +68,6 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 
 [ipxe dnsmasq](https://forum.level1techs.com/t/gnu-linux-installation-server-ipxe-menu-sanboot/186919)
 
-[criar iso do windows UUPDUMP](uupdump.net)
+[criar iso do windows UUPDUMP](https://uupdump.net)
+
+[massgrave windows/office download](https://massgrave.dev/genuine-installation-media)
