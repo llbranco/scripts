@@ -83,8 +83,6 @@ echo 8  - Remover GWX e RUXIM (Pop-up de update do WIN 11)
 echo -------------------------------------------------------------------------------
 
 echo.
-set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
-cls
  Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
  Cls
  if "%opcao%"=="" goto fim
