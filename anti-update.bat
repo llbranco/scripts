@@ -2,9 +2,9 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=8.8.3
-set date=28/nov/24
-set ano=2024
+set build=8.8.4
+set date=12/abr/25
+set ano=2025
 set versao=Anti-Update do mal ver: %build% - %date%
 set obrigado=Obrigado por desinstalar o %versao%
 set hostsfile="%SystemRoot%\system32\drivers\etc\hosts"
@@ -13,12 +13,13 @@ set hostsfile="%SystemRoot%\system32\drivers\etc\hosts"
 ::no caso de comentarios use "underline" ou "hifen" no lugar de espaços
 set adobe_block=125.252.224.90 125.252.224.91 hl2rcv.adobe.com t3dns.adobe.com 3dns-1.adobe.com 3dns-2.adobe.com 3dns-3.adobe.com 3dns-4.adobe.com activate.adobe.com activate-sea.adobe.com activate-sjc0.adobe.com activate.wip.adobe.com activate.wip1.adobe.com activate.wip2.adobe.com activate.wip3.adobe.com activate.wip4.adobe.com adobe.activate.com adobe-dns.adobe.com adobe-dns-1.adobe.com adobe-dns-2.adobe.com adobe-dns-3.adobe.com adobe-dns-4.adobe.com adobeereg.com armdl.adobe.com ood.opsource.net practivate.adobe practivate.adobe.com tpractivate.adobe.newoa  practivate.adobe.ntp practivate.adobe.ipp ereg.adobe.com ereg.wip.adobe.com ereg.wip1.adobe.com ereg.wip2.adobe.com ereg.wip3.adobe.com ereg.wip4.adobe.com wip.adobe.com wip1.adobe.com wip2.adobe.com wip3.adobe.com wip4.adobe.com www.adobeereg.com www.wip.adobe.com www.wip1.adobe.com www.wip2.adobe.com www.wip3.adobe.com www.wip4.adobe.com
 set autocad_block=autodesk.fi autodesk.de autodesk.es autodesk.ca autodesk.dk autodesk.pl ns1.autodesk.com ns2.autodesk.com ns3.autodesk.com a.gtld-servers.net b.gtld-servers.net c.gtld-servers.net d.gtld-servers.net e.gtld-servers.net f.gtld-servers.net g.gtld-servers.net h.gtld-servers.net i.gtld-servers.net j.gtld-servers.net k.gtld-servers.net l.gtld-servers.net ns1.autodesk.com m.gtld-servers.net adobeereg.com 126114-app1.autodesk.com 94175-app1.autodesk.com 94184-app2.autodesk.com 96579-lbal1.autodesk.com acamp.autodesk.com adeskdi3.autodesk.com adeskdmzpdc.autodesk.com adeskgate.autodesk.com adesknews2.autodesk.com adeskout.autodesk.com adsknateur.autodesk.com amernetlog.autodesk.com app5.autodesk.com aprimo-relay1.autodesk.com aprimo-relay2.autodesk.com aprimo-relay3.autodesk.com aprimo-relay4.autodesk.com autosketch.autodesk.com blues.autodesk.com cbuanprd.autodesk.com cbuanprhcllb.autodesk.com cbuanqa2lb.autodesk.com ci3dwsdev-svc.autodesk.com ci3dwsprd-svc.autodesk.com ci3dwsstg-svc.autodesk.com community.autodesk.com cut.autodesk.com cvsprd01.autodesk.com discussion.autodesk.com eur.autodesk.com extcidev.autodesk.com extciqa.autodesk.com extupg.autodesk.com ftp-users.autodesk.com ftp2b.autodesk.com gisdmzpdc.autodesk.com hqaribasrf04.autodesk.com hqmgwww01.autodesk.com hqmgwww04.autodesk.com hqmobileweb01.autodesk.com hqprxsrftrn.autodesk.com hqpsweb01.autodesk.com hubdev-svc.autodesk.com hubprd-svc.autodesk.com hubstg-svc.autodesk.com itappprd01-svc.autodesk.com itappprd02-svc.autodesk.com its.autodesk.com jdevextv-new.autodesk.com jp.autodesk.com jstgextv-new.autodesk.com jstgintv-new.autodesk.com lbsvzw.autodesk.com lbsvzw1.autodesk.com lbsvzw2.autodesk.com library.autodesk.com liveupdate.autodesk.com locationservices.autodesk.com lsctsol04.autodesk.com mail-relay.autodesk.com mneprdext-svc.autodesk.com mut.autodesk.com nbugma-dmz.autodesk.com ns1.autodesk.com ns2.autodesk.com ns3.autodesk.com ns4.autodesk.com ns5.autodesk.com nut.autodesk.com otw-new.autodesk.com otwdownloads.autodesk.com partnercenter.autodesk.com partnerproducts.autodesk.com paste.autodesk.com pedidrq.autodesk.com pediqrx.autodesk.com petars1.autodesk.com petcp11ia-2nat.autodesk.com petcr12ihsrp2.autodesk.com phxgciv.autodesk.com phxgciv_dr.autodesk.com planix3d.autodesk.com pointa.autodesk.com register.autodesk.com registerallied-pr.autodesk.com registeronce.autodesk.com salestraining.autodesk.com searchnews.autodesk.com shop.autodesk.com spamster-bulk.autodesk.com sswwwp.autodesk.com trialdownload.autodesk.com usa.autodesk.com uspetcr12ie_198.autodesk.com uspetcr12if.autodesk.com uspetcr12if_198.autodesk.com uspetcrs12ia_ib_vlan500_2_hsrp.autodesk.com uspetcrs12ia_vlan500_2.autodesk.com uspetcrs12ib_vlan500_2.autodesk.com uspetne06ia_ib_untrust_dip7.autodesk.com usrelay.autodesk.com ussclout1.autodesk.com vzwlpsrel.autodesk.com vzwlpstst.autodesk.com web.autodesk.com webservices.autodesk.com wormhole.autodesk.com www.autodesk.com www3.autodesk.com genuine-software.autodesk.com genuine-software2.autodesk.com
-set corel_block=corel.com apps.corel.com mc.corel.com
+set corel_block=corel.com apps.corel.com mc.corel.com origin-mc.corel.com iws.corel.com ipm.corel.com 2.18.12.147 googletagmanager.com corelstore.com www.corelstore.com deploy.akamaitechnologies.com compute-1.amazonaws.com dev1.ipm.corel.public.corel.net ipp.corel.com
 :: para uma lista de bloqueio mais efetiva consulte https://github.com/hagezi/dns-blocklists#native
 set windows_block=mpa.one.microsoft.com sls.microsoft.com genuine.microsoft.com wat.microsoft.com mpa.microsoft.com searchclient.live.net office.microsoft.com watson.microsoft.com content.microsoft.com logging.microsoft.com windowsupdate.com download.windowsupdate.com download.microsoft.com ntservicepack.microsoft.com update.microsoft.com www.windowsupdate.com windowsupdate.microsoft.com www.windowsupdate.microsoft.com www.wustat.windows.com
 
+
 :: Variaveis definidas
-::rename %~f0 "anti-update%build%.bat"
+rename %~f0 "anti-update%build%.bat"
 
 title  %versao% -- %ano% -- By: llbranco
 
@@ -29,7 +30,7 @@ net session >nul 2>&1
 if %errorLevel% neq 0 (
     echo Este script precisa ser executado como administrador.
     echo Reiniciando com privilégios de administrador...
-    powershell -Command "Start-Process cmd -ArgumentList '/c %~s0' -Verb RunAs"
+    powershell -Command "Start-Process cmd -ArgumentList '/c %~f0' -Verb RunAs"
     exit
 )
 
@@ -126,7 +127,8 @@ set vFlag_hosts=1
 goto antiupdate_avancar
 
 :antiupdateregistro
-:: Desabilitar serviços do Windows Defender e relacionados
+:: Desabilitar serviços do Windows Defender e relacionados (so funciona ate o win7)
+tasklist | find /i "msmpeng.exe" >nul && echo ATENCAO: O Windows Defender esta em execucao!
 
 echo Alterando o valor da chave Start para 4 para desativar os serviços do Windows Defender...
 
@@ -137,7 +139,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisDrv" /v Start
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc" /v Start /t REG_DWORD /d 4 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinDefend" /v Start /t REG_DWORD /d 4 /f
 
-echo Alterações concluídas. Reinicie o computador se necessário.
+echo Alteracoes concluídas. Reinicie o computador se necessario.
 
 set vFlag_registro=1
 goto antiupdate_avancar
@@ -149,11 +151,19 @@ If %vFlag_completo%==1 goto antiupdatehosts
 
 
 :antiupdatehosts
-:: ----------------------------------------- Liberanco permissões do arquivo -----------------------------------------
+::  Liberanco permissoes do arquivo 
 echo liberando acesso ao arquivo HOSTS
-attrib -r -a -s -h %hostsfile%
+::attrib -r -a -s -h %hostsfile%
+icacls %hostsfile% /grant "%username%":F
 
-:: ------------------------------------------------ Cabeçalho do HOSTS -----------------------------------------------
+::criando backup do hostsfile
+if exist %hostsfile% (
+   copy /y %hostsfile% "%hostsfile%.bak"
+)
+
+
+
+::  Cabeçalho do HOSTS 
 echo resetando o hosts
 (
 echo #%versao%
@@ -163,7 +173,7 @@ echo.
 echo.
 )>%hostsfile%
 
-:: --------------------------------------------------- Adobe Block ---------------------------------------------------
+::  Adobe Block 
 echo instalando o %versao% para Adobe Block
 (
 echo #%versao% -- inicio
@@ -175,7 +185,7 @@ echo #Adobe block - linhas abaixo
 for %%s in (%adobe_block%) do find /c /i "%%s" %hostsfile%>nul||(echo.Adicionando "%%s" ao bloqueio&echo.127.0.0.1 %%s>>%hostsfile%||echo.Acesso negado gravando %%s!)
 for /l %%n in (30,1,125) do find /c /i "wwis-dubc1-vip%%n.adobe.com" %hostsfile%>nul||(echo.Adicionando "wwis-dubc1-vip%%n.adobe.com" ao arquivos hosts&echo.127.0.0.1 wwis-dubc1-vip%%n.adobe.com>>%hostsfile%||echo.Acesso negado gravando %%n!)
 
-:: --------------------------------------------------- Corel Block ---------------------------------------------------
+::  Corel Block 
 echo instalando o %versao% para Corel Block
 (
 echo.
@@ -186,7 +196,7 @@ echo #Corel block - linhas abaixo
 for %%s in (%corel_block%) do find /c /i "%%s" %hostsfile%>nul||(echo.Adicionando "%%s" ao bloqueio&echo.127.0.0.1 %%s>>%hostsfile%||echo.Acesso negado gravando %%s!)
 
 
-:: -------------------------------------------------- AutoCad Block -------------------------------------------------
+::  AutoCad Block 
 echo instalando o %versao% para AutoCad Block
 (
 echo.
@@ -197,7 +207,7 @@ echo #AutoCad block - linhas abaixo
 for %%s in (%autocad_block%) do find /c /i "%%s" %hostsfile%>nul||(echo.Adicionando "%%s" ao bloqueio&echo.127.0.0.1 %%s>>%hostsfile%||echo.Acesso negado gravando %%s!)
 
 
-:: -------------------------------------------------- Windows Block --------------------------------------------------
+::  Windows Block 
 echo instalando o %versao% para Windows Block
 (
 echo.
@@ -207,7 +217,7 @@ echo #Windows block - linhas abaixo
 
 
 for %%s in (%windows_block%) do find /c /i "%%s" %hostsfile%>nul||(echo.Adicionando "%%s" ao bloqueio&echo.127.0.0.1 %%s>>%hostsfile%||echo.Acesso negado gravando %%s!)
-:: --------------------------------------------------- finalizando ---------------------------------------------------
+:: finalizando 
 
 (
 echo.
@@ -251,16 +261,16 @@ for %%V in (UseWUServer NoAutoUpdate AUOptions NoAutoRebootWithLoggedOnUsers) do
     reg add "%REG_WINUPDATE%\AU" /v "%%V" /t REG_DWORD /d 1 /f
 )
 
-echo Alterando permissões do registro...
-echo Criando arquivo temporário para alterar permissões...
+echo Alterando permissoes do registro...
+echo Criando arquivo temporário para alterar permissoes...
 (
     echo HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU [2 8 19]
     echo HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate [2 8 19]
 ) > "%temp%\Anti-Update%build%.tmp"
 
-echo Aplicando permissões...
+echo Aplicando permissoes...
 regini "%temp%\Anti-Update%build%.tmp"
-echo Permissões aplicadas.
+echo permissoes aplicadas.
 del "%temp%\Anti-Update%build%.tmp"
 
 rem Pausando atualizações até 2077
@@ -315,6 +325,7 @@ goto menuprincipal
 echo Liberando acesso ao arquivo HOSTS...
 attrib -r -a -s -h %hostsfile%
 
+
 echo Resetando o HOSTS...
 (
 echo 127.0.0.1 localhost
@@ -324,8 +335,8 @@ echo.
 ) > %hostsfile%
 
 echo.
-echo Alterando permissões do registro...
-echo Criando arquivo temporário necessário para alterar permissões...
+echo Alterando permissoes do registro...
+echo Criando arquivo temporário necessario para alterar permissoes...
 
 set REG_WINUPDATE="HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 set REG_SERVICES="HKLM\SYSTEM\CurrentControlSet\Services"
@@ -335,9 +346,9 @@ set REG_SERVICES="HKLM\SYSTEM\CurrentControlSet\Services"
     echo HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate [1 7 17]
 ) > %temp%\Anti-Update%build%.tmp
 
-echo Aplicando permissões...
+echo Aplicando permissoes...
 regini %temp%\Anti-Update%build%.tmp
-echo Permissões aplicadas.
+echo permissoes aplicadas.
 del %temp%\Anti-Update%build%.tmp
 echo.
 
@@ -382,9 +393,7 @@ echo.
 if not exist %systemroot%\system32\gwx\gwx.exe echo *** AVISO ***     *** GWX NAO INSTALADO ***
 if not exist %programfiles%\RUXIM\DTUDriver.exe echo *** AVISO ***     *** RUXIM NAO INSTALADO ***
 
-taskkill /f /im GWX.exe
-taskkill /f /im DTUDriver.exe
-taskkill /f /im PlugScheduler.exe
+for %%x in (GWX.exe DTUDriver.exe PlugScheduler.exe) do taskkill /f /im %%x >nul 2>&1
 
 :: Desinstalando hotfix do sistema
 echo Desinstalando hotfix do sistema...
@@ -426,20 +435,28 @@ echo.
 echo CRIANDO arquivos que TEORICAMENTE impediriam o RUXIM de ser instalados em seu PC
 echo Caso seja solicitado, responda SIM.
 
+set "RUXIM_DIR=%ProgramFiles%\RUXIM"
+set "RUXIM_DIR=%ProgramFiles%\RUXIM"
+if not exist "%RUXIM_DIR%" md "%RUXIM_DIR%"
+
 for %%x in (
     DTUDRIVER.exe PlugScheduler.exe PlugScheduler.xml
     RuximICS.exe RuximIH.exe RuximPHDialogHandlers.dll
     SystemEvaluator.dll antiRUXIM_by-llbranco.txt
 ) do (
-    fsutil file createnew "%programfiles%\RUXIM\%%x" 1
-    CACLS "%programfiles%\RUXIM\%%x" /c /G "%UserName%":R
-    CACLS "%programfiles%\RUXIM\%%x" /c /E /R "%UserName%"
-    CACLS "%programfiles%\RUXIM\%%x" /c /P "%UserName%":N
-    CACLS "%programfiles%\RUXIM\%%x" /c /D "%UserName%"
-    CACLS "%programfiles%\RUXIM\%%x" /c /D "System"
-    CACLS "%programfiles%\RUXIM\%%x" /c /D "everyone"
-    CACLS "%programfiles%\RUXIM\%%x" /c /D "todos"
+    set "ARQUIVO=%RUXIM_DIR%\%%x"
+    
+    echo Criando %%x em %RUXIM_DIR%...
+    fsutil file createnew "!ARQUIVO!" 1 >nul 2>&1
+
+    echo Removendo permissoes de todos...
+    cacls "!ARQUIVO!" /C /E /D SYSTEM >nul 2>&1
+    cacls "!ARQUIVO!" /C /E /D Everyone >nul 2>&1
+    cacls "!ARQUIVO!" /C /E /D "%USERNAME%" >nul 2>&1
 )
+
+
+
 
 echo.
 echo Processo terminado. Agora será solicitado que você pressione qualquer tecla 3 vezes.
@@ -462,11 +479,11 @@ echo           https://github.com/llbranco/scripts
 echo.&echo.&echo.
 pause
 echo O trabalho Anti-Update do mal de Luciano Branco
-echo está licenciado com uma Licença Creative Commons
-echo Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional.
-echo Baseado no trabalho disponível em https://github.com/llbranco/scripts
-echo Podem estar disponíveis autorizações adicionais
-echo às concedidas no âmbito desta licença em https://github.com/llbranco/scripts
+echo esta licenciado com uma Licença Creative Commons
+echo Atribuição-NaoComercial-CompartilhaIgual 4.0 Internacional.
+echo Baseado no trabalho disponivel em https://github.com/llbranco/scripts
+echo Podem estar disponíveis autorizacoes adicionais
+echo as concedidas no ambito desta licenca em https://github.com/llbranco/scripts
 echo.&echo.&echo.
 pause
 goto menuprincipal
