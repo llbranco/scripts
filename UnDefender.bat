@@ -2,7 +2,7 @@
 color 17
 :: definindo variaveis
 	set app=UnDefender 
-	set build=1.3
+	set build=1.4
 	set data=17/abr/25
 	set NewTitle=%app% v%build%
 	set opcao=0
@@ -37,8 +37,7 @@ echo ..%NewTitle%..
 echo %linha%
 echo             Script em MS-DOS Batch para Microsoft Windows 32/64 Bits
 echo                 Projeto de Luciano Branco iniciado em 10/04/2024
-echo           thelucianobranco@gmail.com          Petropolis - RJ - Brasil
-echo            Duvidas, sugestäes ou cr¡ticas: thelucianobranco@gmail.com
+echo            Duvidas, sugestoes ou criticas: https://github.com/llbranco/scripts
 echo			%github%
 echo %linha%
 echo.
@@ -51,7 +50,7 @@ echo	 3  - Bloquear telemetria da Microsoft via firewall
 echo	 9  - Sobre
 echo %linha%
 echo.
-	Set /P opcao=	Tecle a op‡Æo desejada e [ENTER] ou apenas [ENTER] para fechar: 
+	Set /P opcao=	Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
 	Cls
 	If %opcao% equ 0 goto fim
 	If %opcao% equ 1 goto undefender
@@ -61,14 +60,8 @@ echo.
 goto fim
 
 :fim
-	set vCabeca=
-	set vVersao=
-	set vData=
-	set vRelease=
 	set NewTitle=
 	set Title=
-	set test=
-	set subm=
 	set opcao=
 exit
 
@@ -94,12 +87,12 @@ echo Permissoes alem do escopo dessa licen‡a podem estar disponiveis atravez d
 echo thelucianobranco@gmail.com
 echo.
 echo %linha%
-echo piadas a parte, agora falando s‚rio
+echo piadas a parte, agora falando serio
 echo eu nao promovo a pirataria, esse script serve apenas para estudo
 echo se vc gosta de um sistema operacional ou app, recomendo que compre a licenca do mesmo
 echo %linha%
 echo.
-	Set /P licenca=	Tecle 1 depos [ENTER] para ver a licen‡a ou apenas [ENTER] para fechar: 
+	Set /P licenca=	Tecle 1 depos [ENTER] para ver a licenca ou apenas [ENTER] para fechar: 
 	Cls
 	If %licenca% equ 1 start "" http://creativecommons.org/licenses/by-nc-sa/3.0
 goto menu
@@ -188,7 +181,9 @@ for %%b in (
 ) do (
 powershell.exe -NoLogo -command "&{Add-MpPreference -ExclusionPath "%%b" -Force}"
 )
+
 pause
+goto telemetria
 goto menu
 
 :redefender
@@ -240,6 +235,52 @@ goto menu
 :telemetria
 echo adicionando regras de firewall para bloquear telemetrias da microsoft (por ip)
 netsh advfirewall firewall add rule name="%fw_name%" dir=out action=block remoteip=%ms_ip% enable=yes
+
+echo parando servico de protecao de software
+echo.&echo.
+echo caso de erro tente executar no modo de seguranca
+net stop sppsvc
+echo.&echo.
+
+ping -n 3  0.0.0.0 > nul
+
+echo aplicando correcoes no registro do windows
+echo desativando a inicializacao automatica do servico no boot
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\sppsvc" /v start /t REG_DWORD /d 4 /f
+echo.&echo.
+
+ping -n 3  0.0.0.0 > nul
+
+::echo iniciando servico
+::net start sppsvc
+
+ping -n 3  0.0.0.0 > nul
+
+echo parando windows search
+net stop WSearch
+echo.&echo.
+
+echo desabilitando estampa de ultimo acesso dos arquivos
+echo isso melhora o tempo de acesso especialmente em HD
+fsutil.exe behavior set disableLastAccess 1
+echo.&echo.
+
+
+echo habilitando GPEDIT para Windows Home e SL
+dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum >"%temp%\List.txt "
+dir /b %SystemRoot%\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum >>"%temp%\List.txt "
+for /f %%i in ('findstr /i . "%temp%\List.txt" 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i" 
+echo.&echo.
+
+
+echo os comandos abaixo no modo de seguranca 
+echo para desativar o windows defender
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /v "DependOnService" /t REG_MULTI_SZ /d "RpcSs-DISABLED" /f >nul
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "3" /f >nul
+REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "3" /f >nul
+echo.&echo.
+
+
 pause
 goto menu
 
