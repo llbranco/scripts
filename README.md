@@ -71,3 +71,6 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 [criar iso do windows UUPDUMP](https://uupdump.net)
 
 [massgrave windows/office download](https://massgrave.dev/genuine-installation-media)
+
+[added addon's forum thread](https://forum.rg-adguard.net/threads/added-addons-novyj-instrument-dlja-dobavlenie-dopolnenij-v-distributiv-v-windows.2363/) - [download zip](https://addons.rg-adguard.net/updates/added_addon.zip)
+
