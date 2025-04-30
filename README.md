@@ -74,3 +74,5 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 
 [added addon's forum thread](https://forum.rg-adguard.net/threads/added-addons-novyj-instrument-dlja-dobavlenie-dopolnenij-v-distributiv-v-windows.2363/) - [download zip](https://addons.rg-adguard.net/updates/added_addon.zip)
 
+pra instalar windows store no windows LTSC
+```wsreset -i```
