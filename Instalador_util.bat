@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.8
-set date=03/abr/25
+set build=1.9
+set date=12/mai/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -170,6 +170,10 @@ if exist %x64% (
 ) else (
   %x86% /uninstall
 )
+
+::atualizando winget
+winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements
+
 ::winget uninstall OneDriveSetup.exe
 
 :: revomido Adobe.Acrobat.Reader.64-bit e adicionado onedrive
@@ -185,6 +189,8 @@ Microsoft.DirectX
 AnyDeskSoftwareGmbH.AnyDesk
 Oracle.JavaRuntimeEnvironment
 Microsoft.OneDrive
+OpenAL.OpenAL
+Microsoft.XNARedist
 Microsoft.DotNet.Runtime.3
 Microsoft.DotNet.Runtime.3_1
 Microsoft.DotNet.Runtime.4
@@ -192,12 +198,14 @@ Microsoft.DotNet.Runtime.5
 Microsoft.DotNet.Runtime.6
 Microsoft.DotNet.Runtime.7
 Microsoft.DotNet.Runtime.8
+Microsoft.DotNet.DesktopRuntime.8
 Microsoft.VCRedist.2005.x86
 Microsoft.VCRedist.2005.x64
 Microsoft.VCRedist.2008.x86
 Microsoft.VCRedist.2008.x64
 Microsoft.VCRedist.2010.x86
 Microsoft.VCRedist.2010.x64
+Microsoft.VCRedist.2012x86
 Microsoft.VCRedist.2012.x86
 Microsoft.VCRedist.2012.x64
 Microsoft.VCRedist.2013.x86
@@ -207,7 +215,8 @@ Microsoft.VCRedist.2015+.x64
 ) do (
 title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
-winget install -e --id %%a --verbose
+::winget install -e --id %%a --verbose
+winget install %%a --force
 echo.&echo.&echo.
 )
 
