@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9
-set date=12/mai/25
+set build=1.9.1
+set date=26/mai/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -216,7 +216,8 @@ Microsoft.VCRedist.2015+.x64
 title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
 ::winget install -e --id %%a --verbose
-winget install %%a --force
+powershell.exe -NoLogo -Command "&{winget install %%a --force}"
+
 echo.&echo.&echo.
 )
 
