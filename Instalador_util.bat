@@ -2,7 +2,7 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.1
+set build=1.9.2
 set date=26/mai/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
@@ -26,6 +26,8 @@ cls
 goto :eof
 
 :payload
+cls
+title  %versao% -- %ano% -- By: llbranco
 echo %linha%
 echo .. %versao% -- By: llbranco ..
 echo %linha%
@@ -40,6 +42,8 @@ echo	 1  - Instalar util
 echo	 2  - Ativadores (online)
 echo	 3  - Winutil (ChrisTitus)
 echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
+echo	 5  - Atualizar todos os apps via winget
+echo	 5  - Apps para LTSC
 echo %linha%
 echo.
 	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -102,10 +106,19 @@ goto payload
 
 
 :op1
-echo abrindo a microsoft store para atualizar
-start ms-windows-store://pdp/?productid=9WZDNCRFHV7C
+title  %versao% -- atualizando play store -- By: llbranco
+:: echo abrindo a microsoft store para atualizar
+:: nvidia control panel ::start ms-windows-store://pdp/?productid=9WZDNCRFHV7C
+:: start ms-windows-store://
+
+echo tentando atualizar a microsoft store
+powershell.exe -NoLogo -command "&{winget upgrade --all -s msstore --include-unknown}"
+
+echo tentativa 2 de atualizar a microsoft store
+powershell.exe -NoLogo -command "&{Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" -ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" | Invoke-CimMethod -MethodName UpdateScanMethod}"
 pause
 
+title  %versao% -- instalando winget -- By: llbranco
 echo Verificar se o comando "winget" existe
 where winget >nul 2>nul
 if %errorlevel%==0 (
@@ -129,19 +142,14 @@ echo Iniciando a instalacao do Winget...
 powershell -Command "Add-AppxPackage -Path '%DOWNLOAD_DIR%\%FILE_NAME%'"
 
 :next
-echo O Winget está pronto para ser usado. Continuando o processo...
+echo O Winget deve estar pronto para ser usado. Continuando o processo...
 
 echo tentativa de desabilitar o Windows Recall
 reg add HKLM\SOFTWARE\Microsoft\PolicyManager\default\WindowsAI\TurnOffWindowsCopilot /t REG_DWORD /v value /d 1 /f
-
 reg add HKLM\SOFTWARE\Microsoft\PolicyManager\default\WindowsAI\DisableAIDataAnalysis /t REG_DWORD /v value /d 1 /f
-
 reg add HKCU\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /t REG_DWORD /d 1 /f
-
 reg add HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot /v TurnOffWindowsCopilot /t REG_DWORD /d 1 /f
-
 reg add HKLM\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /t REG_DWORD /d 1 /f
-
 reg add HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot /v TurnOffWindowsCopilot /t REG_DWORD /d 1 /f
 
 echo tentativa adicional de desativar recall
@@ -149,7 +157,6 @@ Dism /Online /Disable-Feature /Featurename:"Recall"
 
 echo habilitar impressora windows 10 e 11
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Print" /v RpcAuthnLevelPrivacyEnabled /t REG_DWORD /d 0 /f
-
 
 echo Mudando a associacao de URL http e https para o Chrome
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" /v ProgId /t REG_SZ /d "ChromeHTML" /f
@@ -172,7 +179,7 @@ if exist %x64% (
 )
 
 ::atualizando winget
-winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements
+powershell.exe -NoLogo -command "&{winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements}"
 
 ::winget uninstall OneDriveSetup.exe
 
@@ -216,8 +223,7 @@ Microsoft.VCRedist.2015+.x64
 title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
 ::winget install -e --id %%a --verbose
-powershell.exe -NoLogo -Command "&{winget install %%a --force}"
-
+powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
 echo.&echo.&echo.
 )
 
@@ -246,7 +252,7 @@ echo.
 echo .
 echo ..
 echo ...
-"%programfiles%\WinRAR\rar" x "\\host\apps\office\Office 2013-2024 C2R Install + Lite v7.7.7.5.rar" "%temp%\office\"
+"%programfiles%\WinRAR\rar" x "\\host\apps\office\Office 2013-2024.7z" "%temp%\office\"
 start "" "%temp%\office\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
 
 echo aguarde o termino da instalacao do office antes de instalar o avast
@@ -255,9 +261,30 @@ echo.
 pause
 pause
 echo instalando o avast
-winget install -e --id XPDNZJFNCR1B07 --verbose
-
+winget install -e --id XPDNZJFNCR1B07 --verbose --force --include-unknown --accept-package-agreements --accept-source-agreements
 ::echo importando configuracao do avast
 ::start "" avast.avastconfig
 pause
 goto :eof
+
+:op5
+title  %versao% -- atualizando todos os apps -- By: llbranco
+echo atualizando aplicativos
+powershell.exe -NoLogo -command "&{winget upgrade  --all --force --include-unknown --accept-package-agreements --accept-source-agreements}"
+pause
+goto payload
+
+:op6
+title  %versao% -- instalando apps para LTSC -- By: llbranco
+for %%a in (
+Microsoft.DesktopAppInstaller
+Microsoft.StorePurchaseApp
+Microsoft.WindowsStore
+Microsoft.XboxIdentityProvider
+) do (
+title  %versao% -- Instalando %%a -- By: llbranco
+echo instalando %%a
+::winget install -e --id %%a --verbose
+powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
+pause
+goto payload
