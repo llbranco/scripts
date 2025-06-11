@@ -2,7 +2,7 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.6
+set build=1.9.7
 set date=11/jun/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
@@ -553,6 +553,75 @@ echo.&echo.&echo.
 echo instalando unchecky
 powershell.exe -NoLogo -Command "&{winget install -e --id Unchecky.Unchecky --force --accept-package-agreements --accept-source-agreements}"
 
+
+for %%a in (
+Copilot
+Cortana
+Skype
+"OneNote for Windows 10"
+"Outlook for Windows"
+"Microsoft Update Health Tools"
+"Microsoft Bing"
+"MSN Clima"
+"Obter Ajuda"
+"Pessoas Microsoft"
+"Hub de Comentarios"
+"*Microsoft.BingNews*"
+"*Microsoft.GetHelp*"
+"*Microsoft.Getstarted*"
+"*Microsoft.Messaging*"
+"*Microsoft.Microsoft3DViewer*"
+"*Microsoft.MicrosoftOfficeHub*"
+"*Microsoft.Office.Sway*"
+"*Microsoft.OneConnect*"
+"*Microsoft.People*"
+"*Microsoft.Print3D*"
+"*Microsoft.SkypeApp*"
+"*microsoft.windowscommunicationsapps*"
+"*Microsoft.WindowsFeedbackHub*"
+"*Microsoft.ZuneMusic*"
+"*Microsoft.ZuneVideo*"
+) do (
+title  %versao% -- Desinstalando %%a -- By: llbranco
+echo desinstalando %%a
+::winget install -e --id %%a --verbose
+powershell.exe -NoLogo -Command "&{winget uninstall --name %%a --silent --all-versions}"
+powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name %%a | Remove-AppxPackage -ErrorAction SilentlyContinue}"
+powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name %%a -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue}"
+powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name '%%a' | Remove-AppxPackage -ErrorAction SilentlyContinue}"
+powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name '%%a' -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue}"
+)
+pause
+
+title  %versao% -- Desinstalando bloatwares -- By: llbranco
+for %%a in (
+9WZDNCRD29V9
+9NG1H8B3ZC7M
+MSIX\Microsoft.Getstarted_10.2312.1.0_x64__8wekyb3d8bbwe
+9NZBF4GT040C
+9WZDNCRFJ3Q2
+MSIX\Microsoft.Microsoft3DViewer_7.2502.5012.0
+XPFFZHVGQWWLHB
+9NBLGGH42THS
+9NRX63209R7B
+9NBLGGH10PG8
+9NBLGGH4R32N
+9NBLGGH42THS
+9WZDNCRFHVQM
+9PM860492SZD
+9NBLGGH67NCL
+9NCBCSZSJRSB
+9PKDZBMV1H3T
+9WZDNCRDTBVB
+9WZDNCRFHVJL
+9P8LBDM4FW35
+) do (
+echo desinstalando bloatware
+powershell.exe -NoLogo -Command "&{winget uninstall --id %%a --silent --all-versions}"
+)
+
+pause
+
 echo desinstalando powershell 7 preview
 powershell.exe -NoLogo -Command "&{winget uninstall "Microsoft.PowerShell.Preview" --silent --all-versions}"
 if %errorlevel% equ 0 (
@@ -619,5 +688,6 @@ title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
 ::winget install -e --id %%a --verbose
 powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
+)
 pause
 goto payload
