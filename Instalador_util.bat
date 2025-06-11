@@ -2,13 +2,13 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.4
-set date=06/jun/25
+set build=1.9.6
+set date=11/jun/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
 
-set office="\\host\util\office\Office 2013-2024.7z" "%temp%\office\"
+set office="\\host\util\office\Office 2013-2024.rar" "%temp%\office\"
 set officetmp="%temp%\office\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
 
 title  %versao% -- %ano% -- By: llbranco
@@ -514,7 +514,6 @@ VideoLAN.VLC
 CodecGuide.K-LiteCodecPack.Full
 RARLab.WinRAR
 WinRAR.ShellExtension_d9ma7nkbkv4rp
-Unchecky.Unchecky
 Microsoft.DirectX
 AnyDeskSoftwareGmbH.AnyDesk
 Oracle.JavaRuntimeEnvironment
@@ -540,6 +539,8 @@ Microsoft.VCRedist.2012.x86
 Microsoft.VCRedist.2012.x64
 Microsoft.VCRedist.2013.x86
 Microsoft.VCRedist.2013.x64
+Microsoft.VCRedist.2015.x86
+Microsoft.VCRedist.2015.x64
 Microsoft.VCRedist.2015+.x86
 Microsoft.VCRedist.2015+.x64
 ) do (
@@ -549,9 +550,18 @@ echo instalando %%a
 powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
 echo.&echo.&echo.
 )
+echo instalando unchecky
+powershell.exe -NoLogo -Command "&{winget install -e --id Unchecky.Unchecky --force --accept-package-agreements --accept-source-agreements}"
+
+echo desinstalando powershell 7 preview
+powershell.exe -NoLogo -Command "&{winget uninstall "Microsoft.PowerShell.Preview" --silent --all-versions}"
+if %errorlevel% equ 0 (
+    echo PowerShell 7 Preview desinstalado com sucesso.
+) else (
+    echo Erro ao desinstalar PowerShell 7 Preview.
+)
 
 title  %versao% -- %ano% -- By: llbranco
-
 echo.
 echo ativando winrar
 (
@@ -584,7 +594,7 @@ echo.
 pause
 pause
 echo instalando o avast
-winget install -e --id XPDNZJFNCR1B07 --verbose --force --include-unknown --accept-package-agreements --accept-source-agreements
+powershell.exe -NoLogo -Command "&{winget install -e --id XPDNZJFNCR1B07 --verbose --force --include-unknown --accept-package-agreements --accept-source-agreements}"
 ::echo importando configuracao do avast
 ::start "" avast.avastconfig
 pause
