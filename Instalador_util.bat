@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.7
-set date=11/jun/25
+set build=1.9.8
+set date=14/jun/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -72,7 +72,8 @@ echo	 2  - Ativadores (online)
 echo	 3  - Winutil (ChrisTitus)
 echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
 echo	 5  - Atualizar todos os apps via winget
-echo	 5  - Apps para LTSC
+echo	 6  - Apps para LTSC
+echo	 7  - Instalar via Chocolatey
 echo %linha%
 echo.
 	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -140,8 +141,12 @@ title  %versao% -- atualizando play store -- By: llbranco
 :: nvidia control panel ::start ms-windows-store://pdp/?productid=9WZDNCRFHV7C
 :: start ms-windows-store://
 
+:: nunca desligar o monitor
+powercfg -change monitor-timeout-ac 0
+
 echo tentando atualizar a microsoft store
 powershell.exe -NoLogo -command "&{winget upgrade --all -s msstore --include-unknown}"
+powershell.exe -NoLogo -Command "&{wsreset -i}"
 echo.
 echo tentativa 2 de atualizar a microsoft store
 powershell.exe -NoLogo -command "&{Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" -ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" | Invoke-CimMethod -MethodName UpdateScanMethod}"
@@ -678,6 +683,7 @@ goto payload
 
 :op6
 title  %versao% -- instalando apps para LTSC -- By: llbranco
+powershell.exe -NoLogo -Command "&{wsreset -i}"
 for %%a in (
 Microsoft.DesktopAppInstaller
 Microsoft.StorePurchaseApp
@@ -688,6 +694,27 @@ title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
 ::winget install -e --id %%a --verbose
 powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
+)
+pause
+goto payload
+
+:op7
+title  %versao% -- instalando Chocolatey -- By: llbranco
+echo instalando Chocolatey
+powershell.exe -NoLogo -Command "&{Set-ExecutionPolicy Bypass -Scope Process -Force}"
+powershell.exe -NoLogo -Command "&{[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072}"
+powershell.exe -NoLogo -Command "&{iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))}"
+
+::definiando sim para todas as opcoes do choco
+choco feature enable -n allowGlobalConfirmation
+
+echo instaldndo aplicativos
+for %%a in (
+
+) do (
+title  %versao% -- Instalando %%a via chocolatey -- By: llbranco
+echo instalando %%a
+choco install %%a -y
 )
 pause
 goto payload
