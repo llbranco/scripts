@@ -63,6 +63,16 @@ ou
 Set-SmbClientConfiguration -RequireSecuritySignature $false
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" RequireSecureNegotiate -Value 0 -Force
 
+
+### incluir nos scripts
+
+GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
+
+perfmon /rel
+
+:criar restauração do sistema
+wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
+
 ### Links úteis
 [image2cpp](https://javl.github.io/image2cpp/)
 
@@ -77,6 +87,8 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 [tron script](https://bmrf.org/repos/tron/)
 
 [Usar ASR para clonar Mac](https://discussions.apple.com/docs/DOC-250005828)
+
+[Adicionar ferramentas personalizadas no winre](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-a-custom-tool-to-the-windows-re-boot-options-menu?view=windows-11)
 
 pra instalar windows store no windows LTSC
 ```wsreset -i```
