@@ -70,6 +70,8 @@ GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
 
 perfmon /rel
 
+powercfg /h /type reduced
+
 :criar restauração do sistema
 wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
 
@@ -89,6 +91,10 @@ wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "n
 [Usar ASR para clonar Mac](https://discussions.apple.com/docs/DOC-250005828)
 
 [Adicionar ferramentas personalizadas no winre](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-a-custom-tool-to-the-windows-re-boot-options-menu?view=windows-11)
+
+https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11
+
+
 
 pra instalar windows store no windows LTSC
 ```wsreset -i```
