@@ -94,7 +94,7 @@ wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "n
 
 https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11
 
-
+[zerotier no alpine linux](https://blog.florianuhlemann.de/compile-zerotier-one-on-alpine-linux-from-github-source/)
 
 pra instalar windows store no windows LTSC
 ```wsreset -i```
