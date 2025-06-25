@@ -98,3 +98,19 @@ https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-s
 
 pra instalar windows store no windows LTSC
 ```wsreset -i```
+
+### Mac update time
+
+ntpdate -u time.apple.com
+
+sntp -sS time-a.nist.gov
+
+systemsetup -setusingnetworktime off && systemsetup -setusingnetworktime on
+
+
+para acertar manualmente data e hora
+```date MMDDhhmmYY```
+
+```date 0603212520```
+
+06 (junho) 03 (data) 21:25 (hora formato 24hs) 20 (ano 2020)
