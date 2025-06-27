@@ -99,6 +99,9 @@ https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-s
 pra instalar windows store no windows LTSC
 ```wsreset -i```
 
+
+[SteamCMD ARM](https://www.reddit.com/r/termux/comments/1fosora/running_steamcmd_on_a_arm64_mobile_device/)
+
 ### Mac update time
 
 ntpdate -u time.apple.com
@@ -106,7 +109,6 @@ ntpdate -u time.apple.com
 sntp -sS time-a.nist.gov
 
 systemsetup -setusingnetworktime off && systemsetup -setusingnetworktime on
-
 
 para acertar manualmente data e hora
 ```date MMDDhhmmYY```
