@@ -1,0 +1,25 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\15.0\Common\Internet]
+"msoridShouldUseReauthRequestProxy"=dword:00000000
+"SpoAuthenticatorHeaderEnabled"=dword:00000000
+"IsOnRequestCompletedActivityEnabled"=dword:00000000
+"UseOnlineContent"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\15.0\Common\SignIn]
+"SignInOptions"=dword:00000003
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\15.0\Common\General]
+"PreferCloudSaveLocations"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\16.0\Common\Internet]
+"msoridShouldUseReauthRequestProxy"=dword:00000000
+"SpoAuthenticatorHeaderEnabled"=dword:00000000
+"IsOnRequestCompletedActivityEnabled"=dword:00000000
+"UseOnlineContent"=dword:00000000
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\16.0\Common\SignIn]
+"SignInOptions"=dword:00000003
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\16.0\Common\General]
+"PreferCloudSaveLocations"=dword:00000000
