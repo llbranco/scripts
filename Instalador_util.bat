@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.8
-set date=14/jun/25
+set build=1.9.8.1
+set date=26/ago/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -67,13 +67,14 @@ echo.
 echo                               Selecione uma Opcao
 echo.
 echo %linha%
-echo	 1  - Instalar util
+echo	 1  - Instalar util (via winget)
+echo	 a  - Instalar util (via choco)
 echo	 2  - Ativadores (online)
 echo	 3  - Winutil (ChrisTitus)
 echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
 echo	 5  - Atualizar todos os apps via winget
 echo	 6  - Apps para LTSC
-echo	 7  - Instalar via Chocolatey
+echo	 x  - Desinstalar atualizacao do windows (ex: kb5063878)
 echo %linha%
 echo.
 	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -81,6 +82,55 @@ echo.
  If %opcao% equ 0 goto fim
  goto op%opcao%
 goto fim
+
+:opa
+cls
+echo instalando chocolatey
+::download install.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((new-object net.webclient).DownloadFile('https://community.chocolatey.org/install.ps1','%DIR%install.ps1'))"
+::run installer
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%DIR%install.ps1' %*"
+echo choco instalado
+echo.
+echo instalando pacotes
+for %%a in (
+unchecky
+winget
+googlechrome
+Firefox
+vlc
+k-litecodecpackfull
+winrar
+directx
+anydesk
+javaruntime
+openal
+xna
+dotnetfx
+dotnetcore3-desktop-runtime
+dotnet-all
+vcredist-all
+::2015 a 2022
+vcredist140
+::vcredist2005
+::vcredist2008
+::vcredist2010
+::vcredist2012
+::vcredist2013
+::vcredist2015
+) do (
+title  %versao% -- Instalando %%a -- By: llbranco
+echo instalando %%a
+::winget install -e --id %%a --verbose
+powershell.exe -NoLogo -Command "&{choco install %%a}"
+echo.&echo.&echo.
+)
+echo voltando ao menu
+echo.
+call :next
+echo retornando ao menu
+pause
+goto payload
 
 
 :op2
@@ -141,16 +191,11 @@ title  %versao% -- atualizando play store -- By: llbranco
 :: nvidia control panel ::start ms-windows-store://pdp/?productid=9WZDNCRFHV7C
 :: start ms-windows-store://
 
-:: nunca desligar o monitor
-powercfg -change monitor-timeout-ac 0
-
 echo tentando atualizar a microsoft store
 powershell.exe -NoLogo -command "&{winget upgrade --all -s msstore --include-unknown}"
-powershell.exe -NoLogo -Command "&{wsreset -i}"
 echo.
 echo tentativa 2 de atualizar a microsoft store
 powershell.exe -NoLogo -command "&{Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" -ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" | Invoke-CimMethod -MethodName UpdateScanMethod}"
-pause
 
 title  %versao% -- instalando winget -- By: llbranco
 echo Verificar se o comando "winget" existe
@@ -174,10 +219,97 @@ powershell.exe -NoLogo -command "&{winget-install.ps1}"
 
 echo Iniciando a instalacao do Winget...
 powershell -Command "Add-AppxPackage -Path '%DOWNLOAD_DIR%\%FILE_NAME%'"
-
-:next
 echo O Winget deve estar pronto para ser usado. Continuando o processo...
 
+call :next
+
+::atualizando winget
+powershell.exe -NoLogo -command "&{winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements}"
+
+::winget uninstall OneDriveSetup.exe
+
+:: revomido Adobe.Acrobat.Reader.64-bit e adicionado onedrive
+for %%a in (
+Google.Chrome
+Mozilla.Firefox
+VideoLAN.VLC
+CodecGuide.K-LiteCodecPack.Full
+RARLab.WinRAR
+WinRAR.ShellExtension_d9ma7nkbkv4rp
+Microsoft.DirectX
+AnyDeskSoftwareGmbH.AnyDesk
+Oracle.JavaRuntimeEnvironment
+Microsoft.OneDrive
+OpenAL.OpenAL
+Microsoft.XNARedist
+Microsoft.DotNet.Runtime.3
+Microsoft.DotNet.Runtime.3_1
+Microsoft.DotNet.Runtime.4
+Microsoft.DotNet.Runtime.5
+Microsoft.DotNet.Runtime.6
+Microsoft.DotNet.Runtime.7
+Microsoft.DotNet.Runtime.8
+Microsoft.DotNet.DesktopRuntime.8
+Microsoft.VCRedist.2005.x86
+Microsoft.VCRedist.2005.x64
+Microsoft.VCRedist.2008.x86
+Microsoft.VCRedist.2008.x64
+Microsoft.VCRedist.2010.x86
+Microsoft.VCRedist.2010.x64
+Microsoft.VCRedist.2012x86
+Microsoft.VCRedist.2012.x86
+Microsoft.VCRedist.2012.x64
+Microsoft.VCRedist.2013.x86
+Microsoft.VCRedist.2013.x64
+Microsoft.VCRedist.2015.x86
+Microsoft.VCRedist.2015.x64
+Microsoft.VCRedist.2015+.x86
+Microsoft.VCRedist.2015+.x64
+) do (
+title  %versao% -- Instalando %%a -- By: llbranco
+echo instalando %%a
+::winget install -e --id %%a --verbose
+powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
+echo.&echo.&echo.
+)
+echo instalando unchecky
+powershell.exe -NoLogo -Command "&{winget install -e --id Unchecky.Unchecky --force --accept-package-agreements --accept-source-agreements}"
+
+echo aguarde o termino da instalacao do office antes de instalar o avast
+echo pois o avast pode excluir o instalador do office
+echo.
+pause
+pause
+call :avast_wg
+pause
+goto :eof
+
+:op5
+title  %versao% -- atualizando todos os apps -- By: llbranco
+echo atualizando aplicativos
+powershell.exe -NoLogo -command "&{winget upgrade  --all --force --include-unknown --accept-package-agreements --accept-source-agreements}"
+pause
+goto payload
+
+:op6
+title  %versao% -- instalando apps para LTSC -- By: llbranco
+for %%a in (
+Microsoft.DesktopAppInstaller
+Microsoft.StorePurchaseApp
+Microsoft.WindowsStore
+Microsoft.XboxIdentityProvider
+) do (
+title  %versao% -- Instalando %%a -- By: llbranco
+echo instalando %%a
+::winget install -e --id %%a --verbose
+powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
+)
+pause
+goto payload
+
+
+
+:next
 echo tentativa de desabilitar o Windows Recall
 reg add HKLM\SOFTWARE\Microsoft\PolicyManager\default\WindowsAI\DisableAIDataAnalysis /t REG_DWORD /v value /d 1 /f
 reg add HKCU\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /t REG_DWORD /d 1 /f
@@ -188,7 +320,6 @@ reg add HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot /v TurnOffWindow
 
 echo tentativa adicional de desativar recall
 Dism /Online /Disable-Feature /Featurename:"Recall"
-
 
 title  %versao% -- otimizacao e telemetria -- By: llbranco
 echo habilitar impressora windows 10 e 11
@@ -417,6 +548,9 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v DisableTele
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v DisableTelemetryOptInSettingsUx /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" /v DORestrictPeerSelectionBy /t REG_DWORD /d 1 /f
 
+echo permitir rede insegura windows 10 e 11
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation" /v AllowInsecureGuestAuth /t REG_DWORD /d 1 /f
+
 ::Connected User Experiences and Telemetry => Disabled
 sc stop DiagTrack
 sc config DiagTrack start=disabled
@@ -468,7 +602,6 @@ reg delete "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\Diagtrack-Liste
 reg delete "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v Start /t REG_DWORD /d 0 /f
 
-
 ::relativo ao defender
 powershell.exe -NoLogo -command "&{Set-MpPreference -MAPSReporting Disabled}"
 powershell.exe -NoLogo -command "&{Set-MpPreference -SubmitSamplesConsent Never}"
@@ -505,59 +638,6 @@ if exist %x64% (
 ) else (
   %x86% /uninstall
 )
-
-::atualizando winget
-powershell.exe -NoLogo -command "&{winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements}"
-
-::winget uninstall OneDriveSetup.exe
-
-:: revomido Adobe.Acrobat.Reader.64-bit e adicionado onedrive
-for %%a in (
-Google.Chrome
-Mozilla.Firefox
-VideoLAN.VLC
-CodecGuide.K-LiteCodecPack.Full
-RARLab.WinRAR
-WinRAR.ShellExtension_d9ma7nkbkv4rp
-Microsoft.DirectX
-AnyDeskSoftwareGmbH.AnyDesk
-Oracle.JavaRuntimeEnvironment
-Microsoft.OneDrive
-OpenAL.OpenAL
-Microsoft.XNARedist
-Microsoft.DotNet.Runtime.3
-Microsoft.DotNet.Runtime.3_1
-Microsoft.DotNet.Runtime.4
-Microsoft.DotNet.Runtime.5
-Microsoft.DotNet.Runtime.6
-Microsoft.DotNet.Runtime.7
-Microsoft.DotNet.Runtime.8
-Microsoft.DotNet.DesktopRuntime.8
-Microsoft.VCRedist.2005.x86
-Microsoft.VCRedist.2005.x64
-Microsoft.VCRedist.2008.x86
-Microsoft.VCRedist.2008.x64
-Microsoft.VCRedist.2010.x86
-Microsoft.VCRedist.2010.x64
-Microsoft.VCRedist.2012x86
-Microsoft.VCRedist.2012.x86
-Microsoft.VCRedist.2012.x64
-Microsoft.VCRedist.2013.x86
-Microsoft.VCRedist.2013.x64
-Microsoft.VCRedist.2015.x86
-Microsoft.VCRedist.2015.x64
-Microsoft.VCRedist.2015+.x86
-Microsoft.VCRedist.2015+.x64
-) do (
-title  %versao% -- Instalando %%a -- By: llbranco
-echo instalando %%a
-::winget install -e --id %%a --verbose
-powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
-echo.&echo.&echo.
-)
-echo instalando unchecky
-powershell.exe -NoLogo -Command "&{winget install -e --id Unchecky.Unchecky --force --accept-package-agreements --accept-source-agreements}"
-
 
 for %%a in (
 Copilot
@@ -596,7 +676,6 @@ powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name %%a -AllUsers | Remove-
 powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name '%%a' | Remove-AppxPackage -ErrorAction SilentlyContinue}"
 powershell.exe -NoLogo -Command "&{Get-AppxPackage -Name '%%a' -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue}"
 )
-pause
 
 title  %versao% -- Desinstalando bloatwares -- By: llbranco
 for %%a in (
@@ -625,7 +704,16 @@ echo desinstalando bloatware
 powershell.exe -NoLogo -Command "&{winget uninstall --id %%a --silent --all-versions}"
 )
 
-pause
+echo removendo aplicativos sugeridos
+powershell.exe -NoLogo -Command "&{Get-AppxPackage LinkedIn | Remove-AppxPackage}"
+powershell.exe -NoLogo -Command "&{Get-AppxPackage -allusers LinkedIn | Remove-AppxPackage}"
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "7EE7776C.LinkedInforWindows_w1wdnht996qgy" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Clipchamp.Clipchamp_yxz26nhyzhsrt" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.Todos_8wekyb3d8bbwe" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.ZuneVideo_8wekyb3d8bbwe" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "SpotifyAB.SpotifyMusic_zpdnekdrzrea0" /f
+REG DELETE "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /f
 
 echo desinstalando powershell 7 preview
 powershell.exe -NoLogo -Command "&{winget uninstall "Microsoft.PowerShell.Preview" --silent --all-versions}"
@@ -661,60 +749,35 @@ echo ..
 echo ...
 "%programfiles%\WinRAR\rar" x %office%
 start "" %officetmp%
+goto :eof
 
-echo aguarde o termino da instalacao do office antes de instalar o avast
-echo pois o avast pode excluir o instalador do office
-echo.
-pause
-pause
+:avast_wg
 echo instalando o avast
 powershell.exe -NoLogo -Command "&{winget install -e --id XPDNZJFNCR1B07 --verbose --force --include-unknown --accept-package-agreements --accept-source-agreements}"
 ::echo importando configuracao do avast
 ::start "" avast.avastconfig
-pause
 goto :eof
 
-:op5
-title  %versao% -- atualizando todos os apps -- By: llbranco
-echo atualizando aplicativos
-powershell.exe -NoLogo -command "&{winget upgrade  --all --force --include-unknown --accept-package-agreements --accept-source-agreements}"
-pause
-goto payload
+:avast_choco
+echo instalando o avast
+choco install avastfreeantivirus
+::echo importando configuracao do avast
+::start "" avast.avastconfig
+goto :eof
 
-:op6
-title  %versao% -- instalando apps para LTSC -- By: llbranco
-powershell.exe -NoLogo -Command "&{wsreset -i}"
-for %%a in (
-Microsoft.DesktopAppInstaller
-Microsoft.StorePurchaseApp
-Microsoft.WindowsStore
-Microsoft.XboxIdentityProvider
-) do (
-title  %versao% -- Instalando %%a -- By: llbranco
-echo instalando %%a
-::winget install -e --id %%a --verbose
-powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
-)
-pause
-goto payload
+:opx
+Set /P kbnum=
+echo desinstalador de atualizacao
+echo.
+echo atualizacoes problematicas ja serao removidas automaticamente
+echo.
+echo digite o codigo da atualizacao sem o KB
+echo para desinstalar KB5063878 digite apenas 5063878
+echo.
+	Set /P kbnum=	qual update deseja remover: 
+echo.
 
-:op7
-title  %versao% -- instalando Chocolatey -- By: llbranco
-echo instalando Chocolatey
-powershell.exe -NoLogo -Command "&{Set-ExecutionPolicy Bypass -Scope Process -Force}"
-powershell.exe -NoLogo -Command "&{[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072}"
-powershell.exe -NoLogo -Command "&{iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))}"
-
-::definiando sim para todas as opcoes do choco
-choco feature enable -n allowGlobalConfirmation
-
-echo instaldndo aplicativos
-for %%a in (
-
-) do (
-title  %versao% -- Instalando %%a via chocolatey -- By: llbranco
-echo instalando %%a
-choco install %%a -y
-)
+wusa /uninstall /kb:5063878 /quiet /norestart
+wusa /uninstall /kb:%kbnum% /quiet /norestart
 pause
 goto payload
