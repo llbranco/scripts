@@ -2,7 +2,7 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.8.1
+set build=1.9.8.2
 set date=26/ago/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
@@ -87,9 +87,12 @@ goto fim
 cls
 echo instalando chocolatey
 ::download install.ps1
-powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((new-object net.webclient).DownloadFile('https://community.chocolatey.org/install.ps1','%DIR%install.ps1'))"
+::powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((new-object net.webclient).DownloadFile('https://community.chocolatey.org/install.ps1','%DIR%install.ps1'))"
+
+powershell.exe -NoLogo -command "&{irm https://community.chocolatey.org/install.ps1 | iex}"
+
 ::run installer
-powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%DIR%install.ps1' %*"
+::powershell.exe -NoLogo -Command "&{'%DIR%install.ps1' %*}"
 echo choco instalado
 echo.
 echo instalando pacotes
@@ -121,7 +124,6 @@ vcredist140
 ) do (
 title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
-::winget install -e --id %%a --verbose
 powershell.exe -NoLogo -Command "&{choco install %%a}"
 echo.&echo.&echo.
 )
