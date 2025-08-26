@@ -124,7 +124,8 @@ vcredist140
 ) do (
 title  %versao% -- Instalando %%a -- By: llbranco
 echo instalando %%a
-powershell.exe -NoLogo -Command "&{choco install %%a}"
+::powershell.exe -NoLogo -Command "&{choco install %%a --accept-license --yes --args-global --ignore-checksums}"
+choco install %%a --accept-license --yes --args-global --ignore-checksums
 echo.&echo.&echo.
 )
 echo voltando ao menu
