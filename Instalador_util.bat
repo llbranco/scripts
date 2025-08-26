@@ -766,7 +766,7 @@ choco install avastfreeantivirus
 goto :eof
 
 :opx
-Set /P kbnum=
+Set kbnum=
 echo desinstalador de atualizacao
 echo.
 echo atualizacoes problematicas ja serao removidas automaticamente
@@ -776,8 +776,9 @@ echo para desinstalar KB5063878 digite apenas 5063878
 echo.
 	Set /P kbnum=	qual update deseja remover: 
 echo.
-
+echo desinstalando a atualizacao kb%kbnum%
 wusa /uninstall /kb:5063878 /quiet /norestart
 wusa /uninstall /kb:%kbnum% /quiet /norestart
+echo.
 pause
 goto payload
