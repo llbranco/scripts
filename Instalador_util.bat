@@ -328,6 +328,24 @@ title  %versao% -- otimizacao e telemetria -- By: llbranco
 echo habilitar impressora windows 10 e 11
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Print" /v RpcAuthnLevelPrivacyEnabled /t REG_DWORD /d 0 /f
 
+echo desativar login do office 365
+:: Office 2013 (15.0)
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\Internet" /v "msoridShouldUseReauthRequestProxy" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\Internet" /v "SpoAuthenticatorHeaderEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\Internet" /v "IsOnRequestCompletedActivityEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\Internet" /v "UseOnlineContent" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\SignIn" /v "SignInOptions" /t REG_DWORD /d 3 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\15.0\Common\General" /v "PreferCloudSaveLocations" /t REG_DWORD /d 0 /f
+
+:: Office 2016 (16.0)
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\Internet" /v "msoridShouldUseReauthRequestProxy" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\Internet" /v "SpoAuthenticatorHeaderEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\Internet" /v "IsOnRequestCompletedActivityEnabled" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\Internet" /v "UseOnlineContent" /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\SignIn" /v "SignInOptions" /t REG_DWORD /d 3 /f
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Common\General" /v "PreferCloudSaveLocations" /t REG_DWORD /d 0 /f
+
+
 echo Mudando a associacao de URL http e https para o Chrome
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" /v ProgId /t REG_SZ /d "ChromeHTML" /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" /v ProgId /t REG_SZ /d "ChromeHTML" /f
