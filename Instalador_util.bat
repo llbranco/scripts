@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.8.2
-set date=26/ago/25
+set build=1.9.8.3
+set date=27/ago/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -68,13 +68,16 @@ echo                               Selecione uma Opcao
 echo.
 echo %linha%
 echo	 1  - Instalar util (via winget)
-echo	 a  - Instalar util (via choco)
+echo	 a  - Instalar util (via chocolatey)
+echo	 b  - Reparar chocolatey (use caso "a" n funciona)
 echo	 2  - Ativadores (online)
 echo	 3  - Winutil (ChrisTitus)
 echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
 echo	 5  - Atualizar todos os apps via winget
 echo	 6  - Apps para LTSC
 echo	 x  - Desinstalar atualizacao do windows (ex: kb5063878)
+echo	 y  - desinstalar aplicativo pelo nome
+echo	 Z  - Desinstalar office
 echo %linha%
 echo.
 	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
@@ -135,6 +138,16 @@ echo retornando ao menu
 pause
 goto payload
 
+:opb
+echo deletando a pasta %ALLUSERSPROFILE%\chocolatey_old, caso exista
+rmdir /q /s "%ALLUSERSPROFILE%\chocolatey_old"
+echo.
+echo renomeando chocolatey para chocolatey_old
+ren "%ALLUSERSPROFILE%\chocolatey" "chocolatey_old"
+echo.
+echo voltando ao menu
+pause
+goto payload
 
 :op2
 Cls
@@ -787,6 +800,8 @@ choco install avastfreeantivirus
 goto :eof
 
 :opx
+echo desinstalando office padrao do Windows
+
 Set kbnum=
 echo desinstalador de atualizacao
 echo.
@@ -801,5 +816,21 @@ echo desinstalando a atualizacao kb%kbnum%
 wusa /uninstall /kb:5063878 /quiet /norestart
 wusa /uninstall /kb:%kbnum% /quiet /norestart
 echo.
+pause
+goto payload
+
+:opy
+::https://www.tenforums.com/tutorials/4689-uninstall-apps-windows-10-a.html
+echo digite o nome do aplicativo
+Set /P unapp=	qual aplicativo deseja remover:
+wmic product where name=”%unapp%” call uninstall /nointeractive
+pause
+goto payload
+
+:opz
+echo desinstalar office padrao do Windows
+powershell.exe -NoLogo -Command "&{Get-appxpackage -allusers *Microsoft.Office* | Remove-AppxPackage}"
+echo .
+powershell.exe -NoLogo -Command "&{Get-appxprovisionedpackage -online | where-object {$_.packagename -like '*Microsoft.Office*'} | remove-appxprovisionedpackage -online}"
 pause
 goto payload
