@@ -116,3 +116,7 @@ para acertar manualmente data e hora
 ```date 0603212520```
 
 06 (junho) 03 (data) 21:25 (hora formato 24hs) 20 (ano 2020)
+
+
+
+[davince resolve 19 linux](https://www.reddit.com/r/LinuxCrackSupport/comments/1f17xw6/davinci_resolve_studio_19_crack_for_linux/)
