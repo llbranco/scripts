@@ -119,4 +119,4 @@ para acertar manualmente data e hora
 
 
 
-[davince resolve 19 linux](https://www.reddit.com/r/LinuxCrackSupport/comments/1f17xw6/davinci_resolve_studio_19_crack_for_linux/)
+[davince resolve studio linux](https://www.reddit.com/r/LinuxCrackSupport/comments/1myctg4/davinci_resolve_studio_201_fix_linux_crack_guide/?sort=new)
