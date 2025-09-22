@@ -76,6 +76,8 @@ powercfg /h /type reduced
 wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
 
 ### Links úteis
+[configurar mic no obs](https://www.youtube.com/watch?v=G1VzeT9t24Y)
+
 [image2cpp](https://javl.github.io/image2cpp/)
 
 [ipxe dnsmasq](https://forum.level1techs.com/t/gnu-linux-installation-server-ipxe-menu-sanboot/186919)
