@@ -122,3 +122,7 @@ para acertar manualmente data e hora
 
 
 [davince resolve studio linux](https://www.reddit.com/r/LinuxCrackSupport/comments/1myctg4/davinci_resolve_studio_201_fix_linux_crack_guide/?sort=new)
+
+obs em 2 pcs:
+no pc gamer: srt://ip_stream:porta&mode=caller
+no pc streamer: srt://ip_gamer:porta&mode=listener
