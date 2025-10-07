@@ -126,3 +126,6 @@ para acertar manualmente data e hora
 obs em 2 pcs:
 no pc gamer: srt://ip_stream:porta&mode=caller
 no pc streamer: srt://ip_gamer:porta&mode=listener
+
+
+[Windows Recovery Personalizado OEM Recovery](https://www.anarethos.com/recovery.html)
