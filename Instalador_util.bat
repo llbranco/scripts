@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.8.3
-set date=27/ago/25
+set build=1.9.9.0
+set date=17/out/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -91,7 +91,7 @@ cls
 echo instalando chocolatey
 ::download install.ps1
 ::powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((new-object net.webclient).DownloadFile('https://community.chocolatey.org/install.ps1','%DIR%install.ps1'))"
-
+powershell.exe -NoLogo -command "&{Set-ExecutionPolicy -ExecutionPolicy ByPass -Scope LocalMachine}"
 powershell.exe -NoLogo -command "&{irm https://community.chocolatey.org/install.ps1 | iex}"
 
 ::run installer
@@ -131,6 +131,7 @@ echo instalando %%a
 choco install %%a --accept-license --yes --args-global --ignore-checksums
 echo.&echo.&echo.
 )
+palse
 echo voltando ao menu
 echo.
 call :next
@@ -158,7 +159,11 @@ echo.
 echo %linha%
 echo	 1  - KMS VL ALL
 echo	 2  - MAS activator (MassGrave)
-echo	 3  - menu anterior
+echo	 3  - PMAS
+echo	 4  - KMS sobre DNS
+echo	 5  - MAS sobre DNS
+echo	 6  - PMAS sobre DNS
+echo	 0  - menu anterior
 echo.
 	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
 	Cls
@@ -185,6 +190,19 @@ pause
 goto payload
 
 :at3
+powershell.exe -NoLogo -command "&{irm tinyurl.com/getpmas | iex}"
+goto payload
+
+:at4
+powershell.exe -NoLogo -command "&{iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://raw.githubusercontent.com/abbodi1406/KMS_VL_ALL_AIO/master/KMS_VL_ALL_AIO.cmd | Out-String)}"
+goto payload
+
+:at5
+powershell.exe -NoLogo -command "&{iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://get.activated.win | Out-String)}"
+goto payload
+
+:at6
+powershell.exe -NoLogo -command "&{iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://tinyurl.com/getpmas | Out-String)}"
 goto payload
 
 :op3
