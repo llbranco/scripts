@@ -119,7 +119,9 @@ para acertar manualmente data e hora
 
 06 (junho) 03 (data) 21:25 (hora formato 24hs) 20 (ano 2020)
 
+## deletar esse update do windows 11 pois ele quebra localhost
 
+KB5066835
 
 [davince resolve studio linux](https://www.reddit.com/r/LinuxCrackSupport/comments/1myctg4/davinci_resolve_studio_201_fix_linux_crack_guide/?sort=new)
 
