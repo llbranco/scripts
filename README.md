@@ -121,7 +121,11 @@ para acertar manualmente data e hora
 
 ## deletar esse update do windows 11 pois ele quebra localhost
 
-KB5066835
+wusa /uninstall /KB:5066835
+
+## deletar esse update do windows 11 pois causa problemas com SSD
+
+wusa /uninstall /KB:5063878
 
 [transcrição de audio vibe](https://github.com/thewh1teagle/vibe)
 
