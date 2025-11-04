@@ -1,9 +1,19 @@
-@echo off & cd /d %~dp0
+@echo off & @%SystemDrive% & @prompt & @color 17
+::permitindo acentuação
+for /f "tokens=2 delims=:." %%x in ('chcp') do set cp=%%x
+chcp 1252>nul
+
+:: elevando batch para adm
+:: não edite essa parte
+set "params=%*"
+cd /d "%~dp0" && ( if exist "%temp%\getadmin.vbs" del "%temp%\getadmin.vbs" ) && fsutil dirty query %systemdrive% 1>nul 2>nul || (  echo Set UAC = CreateObject^("Shell.Application"^) : UAC.ShellExecute "cmd.exe", "/k cd ""%~sdp0"" && %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs" && "%temp%\getadmin.vbs" && exit /B )
+cls
+
 :: Definindo variaveis do ambiente
 setlocal
 color 71
-set build=1.1.8
-set date=22/out/24
+set build=1.1.13
+set date=04/nov/25
 set ano=2024
 set versao=Ferramenta de reparo simples do windows ver: %build% - %date%
 set linha=-------------------------------------------------------------------------------
@@ -39,8 +49,9 @@ echo C  - Mudar Perfil de energia
 echo D  - Desabilitar estampa de ultimo acesso (melhora vel de acesso do disco)
 echo E  - Backup wi-fi
 echo F  - Habilitar GPEDIT.MSC (para Win Home e SL)
-echo G  - Desabilitar UAC
+echo G  - Desabilitar UAC / Bitlocker
 echo H  - Habilitar/Desabilitar menu F8 no windows
+echo R  - Submenu de Rede
 echo S  - Verificar S.M.A.R.T.
 echo 0  - Sair                                           https://github.com/llbranco
 echo %linha%
@@ -64,6 +75,7 @@ echo 1  - DISM /online /Cleanup-Image /StartComponentCleanup
 echo 2  - DISM /Online /Cleanup-image /RestoreHealth
 echo 3  - Desabilitar espaco reservado win10/11
 echo 4  - Habilitar   espaco reservado win10/11
+echo 5  - Reparos DISM /offline ( em outro disco )
 set dism=
  Set /P dism= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
  Cls
@@ -115,6 +127,30 @@ DISM /Online /Set-ReservedStorageState /State:Enable​
 pause
 goto menuprincipal
 
+
+
+:dism5
+set unidade=0
+echo.
+echo Digite a letra da unidade que deseja reparar [ex: d:]
+ Set /P unidade= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
+ Cls
+ If %unidade% equ 0 goto fim
+ set imagem=%unidade%\Windows
+:: Definindo a unidade
+mkdir %temp%\dism
+
+dism /image:%unidade% /cleanup-image /restorehealth /scratchdir:%temp%\dism
+:: onde o arquivo install.wim está localizado
+::/source:%unidade%\dism-tmp
+:: evita que a reparação necessite da internet
+::/limitaccess
+
+pause
+goto menuprincipal
+
+
+
 :op2
 @echo off
 reg add HKLM\System\Setup\LabConfig /v BypassTPMCheck /t reg_dword /d 0x00000001 /f
@@ -128,17 +164,20 @@ goto menuprincipal
 :op3
 :: https://www.windowscentral.com/how-use-sfc-scannow-command-fix-problems-windows-10
 set unidade=0
+set boot=0
 echo Selecione a unidade que deseja executar o reparo
 echo.
 echo um arquivo de log sera gerado na pasta %~dp0
- Set /P unidade= Selecione a letra da unidade sem os : e [ENTER]: 
+ Set /P boot= Selecione a letra da unidade de BOOT/EFI (100MB)sem os : e [ENTER]: 
+  If %boot% equ 0 goto op3_erro
+   Set /P unidade= Selecione a letra da unidade do windows sem os : e [ENTER]: 
   If %unidade% equ 0 goto op3_erro
 
 echo.>>%frs_log%
 echo Executando reparo de sfc /scannow na unidade %unidade%: >> %frs_log%
 @echo on
 ::for /f "delims=" %%i in (
-sfc /scannow /offbootdir=%unidade%:\ /offwindir=%unidade%:\Windows
+sfc /scannow /offbootdir=%boot%:\ /offwindir=%unidade%:\Windows
 ::) do (
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
@@ -160,9 +199,11 @@ echo executando reparo de boot / BCD na unidade %unidade%:>>%frs_log%
 @echo on
 ::for /f "delims=" %%i in (
 Bcdedit /export %unidade%:\BCD_Backup
-Bootrec /FixMbr
+Bootrec /scanos
+Bootrec /fixmbr
 Bootrec /fixboot
 Bootrec /rebuildbcd
+
 ::) do (
 ::    echo [%date%, %time%] %%i >> %frs_log%
 ::)
@@ -171,6 +212,8 @@ choice /C:SN /M:"O comando acima apresentou algum erro? [SN]"
 IF ERRORLEVEL ==1 GOTO op4_yes
 IF ERRORLEVEL ==2 GOTO op4_no
 GOTO op4_erro
+pause
+goto menuprincipal
 
 pause
 :op4_yes
@@ -198,6 +241,7 @@ echo vc nao selecionou nenhuma unidade ou uma unidade invalida
 echo favor selecione uma opcao valida (sem :)
 pause
 goto op4
+goto menuprincipal
 
 :op5
 shutdown /r /fw
@@ -227,6 +271,7 @@ echo vc nao selecionou nenhuma unidade ou uma unidade invalida
 echo favor selecione uma opcao valida (sem :)
 pause
 goto op6
+goto menuprincipal
 
 :op7
 echo.&echo.&echo.
@@ -322,9 +367,10 @@ pause
 mbr2gpt.exe /validate
 mbr2gpt.exe /convert
 pause
+goto menuprincipal
 
 :mbr2gpt3
-echo por enquanto ainda nao consigui uma forma segura de fazer isso via Batch
+echo por enquanto ainda nao consegui uma forma segura de fazer isso via Batch
 echo sendo assim
 echo.
 echo recomendo usar um dos softwares abaixo para converter seu sistema:
@@ -380,7 +426,7 @@ pause
 goto menuprincipal
 
 :opd
-echo desabilitando estampa de ultimo acessodos arquivos
+echo desabilitando estampa de ultimo acesso dos arquivos
 echo.
 echo isso melhora o tempo de acesso especialmente em HD
 echo ou SSD barato
@@ -414,10 +460,139 @@ pause
 goto menuprincipal
 
 :opg
+cls
+set opg_=0
+echo Selecione uma opcao
+echo %linha%
+echo 1 - Desabilitar	UAC
+echo 2 - Habilitar		UAC
+echo %linha%
+echo 3 - BITLOCKER - verificar status
+echo 4 - BITLOCKER - descriptografar
+echo 9 - menu principal
+echo %linha%
+echo.
+ Set /P opg_= Digite o nome do perfil que deseja [ENTER] para fechar: 
+ Cls
+ goto opg_%opg_%
+ echo vc escolheu "%opg_%"
+ goto opg
+ pause
+ 
+
+:opg_1
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "0" /f
 pause
+goto opg
+
+:opg_2
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "PromptOnSecureDesktop" /t REG_DWORD /d "1" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d "0" /f
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d "1" /f
+pause
+goto opg
+
+
+:opg_3
+manage-bde -status
+pause
+goto opg
+
+:opg_4
+cls
+echo executando uma limpeza superficial de temporarios
+echo isso vai ajudar na velocidade de descriptografia
+echo e pode evitar problemas relacionados a falta de espaço em disco
+echo.
+echo essa limpeza pode demorar um pouco dependendo do seu hardware
+echo e da quantidade de arquivos no seu pc
+echo.
+echo.
+echo.
+pause
+for %%a in (
+"%HomeDrive%\.DS_Store"
+".DS_Store"
+"%SystemDrive%\RECYCLER\*.*"
+"%HomeDrive%\RECYCLER\*.*"
+"%TEMP%\*.*"
+"%SystemDrive%\Temp\*.*"
+"%HomePath%\Temp\*.*"
+"%temp%"
+"%tmp%"
+"%HomePath%\Recent\*.*"
+"%SystemDrive%\*.tmp"
+"%SystemDrive%\*.temp"
+"%SystemRoot%\*.tmp"
+
+"%Systemroot%\Prefetch\*.*"
+"%SystemRoot%\Prefetch"
+
+"%SystemDrive%\*.DMP"
+"%Systemroot%\*.dmp"
+"%Systemroot%\minidump\*.*"
+"%SystemRoot%\Minidump"
+
+"%Systemroot%\System32\wbem\Logs\*.*"
+"%Systemroot%\*.log"
+"%SystemDrive%\*.log"
+"%HomeDrive%\*.log"
+"%SystemDrive%\spoolerlogs"
+
+"%SystemDrive%\*.sqm"
+"%HomeDrive%\*.sqm"
+"C:\*.sqm"
+"D:\*.sqm"
+"%SystemDrive%\sqmnoopt*.sqm"
+"%HomeDrive%\sqmnoopt*.sqm"
+
+"%SYSTEMROOT%\system32\LogFiles"
+) do (
+echo.
+echo.
+echo.
+echo deletando %%a
+del /f/s/q %%a
+del /q/s/a:r %%a
+del /q/s/a:a %%a
+del /q/s/a:h %%a
+Rmdir /s/q %%a
+)
+
+FOR %%d IN (tmp,sqm,log,temp,DS_Store) DO (
+forfiles /p %SYSTEMROOT% /s /m *.%%d /d -1 /c "cmd /c del @file"
+)
+
+for %%a in (
+"%SystemDrive%\$AV_ASW"
+"%SystemDrive%\$WINDOWS.~BT"
+"%SystemDrive%\$Windows.~WS"
+"%SystemDrive%\PerfLogs"
+"%SystemDrive%\Temp"
+"%SystemDrive%\$Recycle.Bin"
+) do (
+echo.
+echo.
+echo.
+echo deletando %%a
+del /f/s/q %%a
+del /q/s/a:r %%a
+del /q/s/a:a %%a
+del /q/s/a:h %%a
+Rmdir /s/q %%a
+)
+cls
+echo.
+echo limpeza concluida
+echo.
+Cls
+set bitlocker_drive=c
+Set /P bitlocker_drive=Digite a letra da unidade que deseja descriptografar ( sem ":" ):  
+manage-bde -off %bitlocker_drive%:
+pause
+goto opg
 goto menuprincipal
 
 :oph
@@ -444,7 +619,6 @@ echo.
  If %bootmenu% equ 3 goto oph3
  If %bootmenu% equ 4 goto oph4
  If %bootmenu% equ 5 goto oph5
- 
 goto oph
 
 :oph1
@@ -481,6 +655,87 @@ goto oph
 wmic diskdrive get model,name,serialnumber,status
 pause
 goto menuprincipal
+
+:opr
+for /f "tokens=14 delims=" %%a in ('ipconfig ^| findstr "IPv4"') do set myip=%%i
+for /f "tokens=14 delims=" %%b in ('ipconfig ^| findstr "IPv6"') do set myip6=%%i
+set opcao=0
+cls
+echo %linha%
+echo submenu de Rede
+echo 	%versao% %instalado%
+echo Seu endereco IPv4: %myip% e IPv6: %myip6%
+echo                               Selecione uma Opcao
+echo %linha%
+echo 1	- Listar dispositivos da rede IP e MAC
+echo 2	- Listar ips ativos dentro da faixa especifica
+echo 3	- Informacoes da wifi
+echo 4	- monstrar informacoes detalhadas da conexao
+echo.
+echo 0  - Sair                                           https://github.com/llbranco
+echo %linha%
+echo Arquivo de log: %frs_log% & echo.
+
+ Set /P opcao= Tecle a opcao desejada e [ENTER] ou apenas [ENTER] para fechar: 
+ Cls
+ If %opcao% equ 0 goto fim
+ goto opr_%opcao%
+ echo vc escolheu a opcao %opcao%
+ pause
+goto menuprincipal
+
+:opr_1
+arp -a
+pause
+goto opr
+
+:opr_2
+echo escolha a faixa de ip desejada. 
+echo ex: para o 192.168.0.x
+echo digite apenas 192.168.0
+echo.
+Set /P faixaip= Digite a faixa desejada, no formato [0.0.0] 
+echo fazendo varredura pela faixa de ip %faixaip%.x
+echo.
+echo pela busca ser recursiva em todos os ips da Rede
+echo indo de %faixaip%.1 ate %faixaip%.254
+echo a busca pode ser demorada
+echo.
+for /L %%i in (1,1,254) do (
+    ping -n 1 %faixaip%.%%i | find "TTL=" > nul
+    if not errorlevel 1 echo %faixaip%.%%i respondeu
+)
+echo.
+echo busca terminada
+pause
+goto opr
+
+:opr_3
+echo informacoes da wifi atual
+netsh wlan show interfaces
+echo.
+pause
+echo listar todas as wifi proximas
+netsh wlan show networks
+pause
+goto opr
+
+:opr_4
+echo conexoes e portas ativas no pc
+echo.
+netstat -an
+pause
+echo conexoes ativas por programas
+echo.
+netstat -b
+pause
+echo dispositivos conectados na Rede
+echo.
+nbtstat -A 
+pause
+goto opr
+
+
 
 :fim
 endlocal
