@@ -21,9 +21,6 @@ set linha=----------------------------------------------------------------------
 set frs_log=%~dp0reparoboot.log
 if not exist "%frs_log%" echo arquivo de log criado em %date% - %time%>%frs_log%
 
-:: Variaveis definidas
-rename %~f0 "ferramenta_reparo_simples_v%build%.bat"
-
 title  %versao% -- %ano% -- By: llbranco
 
 :menuprincipal
