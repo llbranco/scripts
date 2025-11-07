@@ -2,8 +2,8 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.9.0
-set date=17/out/25
+set build=1.9.9.1
+set date=07/nov/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
@@ -54,6 +54,7 @@ set "instalacao=%instalacao:~1%"
 
 
 :payload
+@echo off
 cls
 title  %versao% -- %ano% -- By: llbranco
 echo %linha%
@@ -213,8 +214,20 @@ goto payload
 
 :op4
 echo Desabilitando a assinatura de segurança SMB
+echo habilitando rede padrao para win LTSC e win 11
+
+net stop lanmanserver
+dism /online /enable-feature /featurename:SMB1Protocol /all /norestart
+::powershell -Command "Set-SmbServerConfiguration -EnableSMB2Protocol $true"
+powershell -Command "Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force -Confirm:$false"
+
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v RequireSecureNegotiate /t REG_DWORD /d 0 /f
-echo reinicie o computador para aplicar as alteracoes
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v SMB2 /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation" /v AllowInsecureGuestAuth /t REG_DWORD /d 1 /f
+net start lanmanserver
+::https://github.com/nano11-dev/winget-stuff
+
+echo se nao der certo reinicie o computador para aplicar as alteracoes
 pause
 goto payload
 
