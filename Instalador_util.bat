@@ -2,14 +2,21 @@
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.9.1
-set date=07/nov/25
+set build=1.9.9.2
+set date=08/nov/25
 set ano=2025
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
 
-set office="\\host\util\office\Office 2013-2024.rar" "%temp%\office\"
-set officetmp="%temp%\office\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
+::set office="\\host\util\office\Office 2013-2024.rar" "%temp%\office\"
+::set officetmp="%temp%\office\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
+
+set "office=\\host\util\office"
+set "office_rar=Office 2013-2024.rar"
+set "office_temp=%temp%\office"
+set "EXE=%office_temp%\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
+
+
 
 title  %versao% -- %ano% -- By: llbranco
 ::reiniciar não será mais necessario para fins de compatibilidade com irm/wget
@@ -812,8 +819,48 @@ echo.
 echo .
 echo ..
 echo ...
-"%programfiles%\WinRAR\rar" x %office%
-start "" %officetmp%
+::"%programfiles%\WinRAR\rar" x %office% "%temp%\office\"
+::start "" %officetmp%
+
+echo Tentando acessar %office%\%office_rar% sem credenciais...
+if exist "%office%\%office_rar%" goto extrair
+
+echo Acesso anonimo falhou. Tentando com usuario 'mendigo'...
+net use z: "%office%" /user:mendigo "" /persistent:no >nul 2>&1
+if exist "z:\%office_rar%" (
+    set "SRC=z:\%office_rar%"
+) else (
+    echo Nao foi possivel acessar o share.
+    net use z: /delete >nul 2>&1
+    pause
+    exit /b
+)
+
+:extrair
+if not defined SRC set "SRC=%office%\%office_rar%"
+if not exist "%office_temp%" mkdir "%office_temp%"
+
+echo Extraindo arquivo...
+"%programfiles%\WinRAR\rar.exe" x "%SRC%" "%office_temp%\" >nul 2>&1
+
+if exist "%EXE%" (
+    echo Iniciando instalador...
+    start "" "%EXE%"
+) else (
+    echo Falha ao extrair o executavel.
+)
+
+net use z: /delete >nul 2>&1
+echo Feito.
+echo pressione qualquer tecla para copiar os atalhos do office para o desktop
+pause
+
+set startmenu="%programdata%\Microsoft\Windows\start menu\programs"
+copy /y "%startmenu%\Word.lnk" "%userprofile%\desktop"
+copy /y "%startmenu%\Excel.lnk" "%userprofile%\desktop"
+copy /y "%startmenu%\PowerPoint.lnk" "%userprofile%\desktop"
+copy /y "%startmenu%\Outlook (classic).lnk" "%userprofile%\desktop"
+
 goto :eof
 
 :avast_wg
