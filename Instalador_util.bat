@@ -117,6 +117,7 @@ k-litecodecpackfull
 winrar
 directx
 anydesk
+anydesk.install
 javaruntime
 openal
 xna
@@ -292,6 +293,8 @@ RARLab.WinRAR
 WinRAR.ShellExtension_d9ma7nkbkv4rp
 Microsoft.DirectX
 AnyDeskSoftwareGmbH.AnyDesk
+AnyDesk.AnyDesk
+Unchecky.Unchecky
 Oracle.JavaRuntimeEnvironment
 Microsoft.OneDrive
 OpenAL.OpenAL
