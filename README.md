@@ -140,6 +140,8 @@ no pc streamer: srt://ip_gamer:porta&mode=listener
 
 [liberar clipboard no cachyos](https://forums.eveonline.com/t/proton-on-wayland-broken-clipboard-paste-potential-fix-for-it/499995)
 
+instalar rustdesk arch
+```wget -c https://github.com/rustdesk/rustdesk/releases/download/1.4.4/rustdesk-1.4.4-0-x86_64.pkg.tar.zst && sudo pacman -U ./rustdesk-1.4.4-0-x86_64.pkg.tar.zst```
 
 [investigar problema do boot cachyos](https://discuss.cachyos.org/t/long-black-screen-after-login-and-kde-session-crash-after-some-minutes/13483/9) [2](https://www.google.com/search?q=cachyos+kde+shoot+down+when+load+desktop&oq=cachyos+kde+shoot+down+when+load+desktop&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTE5Mjk1ajBqMagCALACAA&sourceid=chrome&ie=UTF-8)
 
