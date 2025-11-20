@@ -138,6 +138,8 @@ no pc streamer: srt://ip_gamer:porta&mode=listener
 
 [Windows Recovery Personalizado OEM Recovery](https://www.anarethos.com/recovery.html)
 
+[liberar clipboard no cachyos](https://forums.eveonline.com/t/proton-on-wayland-broken-clipboard-paste-potential-fix-for-it/499995)
+
 
 [investigar problema do boot cachyos](https://discuss.cachyos.org/t/long-black-screen-after-login-and-kde-session-crash-after-some-minutes/13483/9) [2](https://www.google.com/search?q=cachyos+kde+shoot+down+when+load+desktop&oq=cachyos+kde+shoot+down+when+load+desktop&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTE5Mjk1ajBqMagCALACAA&sourceid=chrome&ie=UTF-8)
 
