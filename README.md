@@ -76,6 +76,11 @@ powercfg /h /type reduced
 wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
 
 ### Links úteis
+
+[baixar isos](https://os.click/en)
+
+[rodar binario do win 10 no 7](https://github.com/i486/VxKex)
+
 [configurar mic no obs](https://www.youtube.com/watch?v=G1VzeT9t24Y)
 
 [image2cpp](https://javl.github.io/image2cpp/)
