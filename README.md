@@ -79,7 +79,13 @@ wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "n
 
 [baixar isos](https://os.click/en)
 
-[rodar binario do win 10 no 7](https://github.com/i486/VxKex)
+[rodar binario do win 10 no 7 kek setup](https://github.com/i486/VxKex)
+
+[universal nt installer nt4 ao xp](https://github.com/ages2001/Universal-NT-Installer)
+
+[win98 quick install](https://github.com/oerg866/win98-quickinstall)
+
+[só windows mod](https://crustywindo.ws/Main_Page)
 
 [configurar mic no obs](https://www.youtube.com/watch?v=G1VzeT9t24Y)
 
