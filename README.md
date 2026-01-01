@@ -76,6 +76,7 @@ powercfg /h /type reduced
 wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
 
 ### Links úteis
+[universal intel chipset updater](https://github.com/FirstEverTech/Universal-Intel-Chipset-Updater)
 
 [baixar isos](https://os.click/en)
 
