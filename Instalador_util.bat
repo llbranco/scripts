@@ -1,10 +1,11 @@
 @echo off
+
 :: Definindo variaveis do ambiente
 setlocal enabledelayedexpansion
 color 71
-set build=1.9.9.2
-set date=08/nov/25
-set ano=2025
+set build=1.10.0.2
+set date=25/fev/26
+set ano=2026
 set versao=Instalador de utilitarios ver: %build% - %date%
 set linha= ===============================================================================
 
@@ -12,11 +13,9 @@ set linha= =====================================================================
 ::set officetmp="%temp%\office\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
 
 set "office=\\host\util\office"
-set "office_rar=Office 2013-2024.rar"
+set "office_rar=Office 2013-2024 v7.7.7.7 r27.rar"
 set "office_temp=%temp%\office"
-set "EXE=%office_temp%\Office 2013-2024 C2R Install + Lite v7.7.7.5\OInstall_x64.exe"
-
-
+set "EXE=%office_temp%\Office 2013-2024 v7.7.7.7 r27\OInstall_x64.exe"
 
 title  %versao% -- %ano% -- By: llbranco
 ::reiniciar não será mais necessario para fins de compatibilidade com irm/wget
@@ -36,20 +35,6 @@ title  %versao% -- %ano% -- By: llbranco
 ::gerar relatorio de uso de bateria
 ::powercfg /batteryreport /output "%USERPROFILE%\Desktop\relatorio_bateria.html" /Duration days
 
-
-if _%1_==_payload_  goto :payload
-cls
-
-:getadmin
-    echo %~nx0: elevating self
-    set vbs=%temp%\getadmin.vbs
-    echo Set UAC = CreateObject^("Shell.Application"^)                >> "%vbs%"
-    echo UAC.ShellExecute "%~s0", "payload %~sdp0 %*", "", "runas", 1 >> "%vbs%"
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-goto :eof
-
-
 ::obtendo data da instalação do windows
 for /f "tokens=2,* delims=:" %%A in ('systeminfo ^| findstr /i "original"') do (
     set "instalacao=%%A:%%B"
@@ -57,8 +42,6 @@ for /f "tokens=2,* delims=:" %%A in ('systeminfo ^| findstr /i "original"') do (
 
 :: Remove espaços em excesso (opcional)
 set "instalacao=%instalacao:~1%"
-
-
 
 :payload
 @echo off
@@ -78,6 +61,7 @@ echo %linha%
 echo	 1  - Instalar util (via winget)
 echo	 a  - Instalar util (via chocolatey)
 echo	 b  - Reparar chocolatey (use caso "a" n funciona)
+echo	 S  - Instalar util (via scoop)
 echo	 2  - Ativadores (online)
 echo	 3  - Winutil (ChrisTitus)
 echo	 4  - Windows 11 liberar SMB (compartilhamento de arquivos)
@@ -88,7 +72,7 @@ echo	 y  - desinstalar aplicativo pelo nome
 echo	 Z  - Desinstalar office
 echo %linha%
 echo.
-	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
+	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar:
 	Cls
  If %opcao% equ 0 goto fim
  goto op%opcao%
@@ -102,6 +86,7 @@ echo instalando chocolatey
 powershell.exe -NoLogo -command "&{Set-ExecutionPolicy -ExecutionPolicy ByPass -Scope LocalMachine}"
 powershell.exe -NoLogo -command "&{irm https://community.chocolatey.org/install.ps1 | iex}"
 
+refreshenv
 ::run installer
 ::powershell.exe -NoLogo -Command "&{'%DIR%install.ps1' %*}"
 echo choco instalado
@@ -144,6 +129,7 @@ palse
 echo voltando ao menu
 echo.
 call :next
+call :tema_lite
 echo retornando ao menu
 pause
 goto payload
@@ -158,6 +144,39 @@ echo.
 echo voltando ao menu
 pause
 goto payload
+
+
+:ops
+cls
+echo instalando scoop
+
+::powershell.exe -NoLogo -command "&{iex "& {$(irm get.scoop.sh)} -RunAsAdmin"}"
+powershell.exe -NoLogo -Command "iex ""& {$(irm get.scoop.sh)} -RunAsAdmin"""
+
+refreshenv
+echo scoop instalado
+echo.
+echo instalando pacotes
+scoop install main/winget
+scoop install extras/googlechrome
+scoop install extras/firefox
+scoop install extras/vlc
+scoop install nonportable/k-lite-codec-pack-full-np
+scoop install extras/winrar
+scoop install extras/anydesk
+scoop install extras/vcredist-aio
+echo.&echo.&echo.
+pause
+echo voltando ao menu
+echo.
+call :next
+call :tema_lite
+echo retornando ao menu
+pause
+goto payload
+
+
+
 
 :op2
 Cls
@@ -174,9 +193,9 @@ echo	 5  - MAS sobre DNS
 echo	 6  - PMAS sobre DNS
 echo	 0  - menu anterior
 echo.
-	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar: 
+	Set /P opcao=	Tecle a opção desejada e [ENTER] ou apenas [ENTER] para fechar:
 	Cls
- If %opcao% equ 0 goto fim
+ If %opcao% equ 0 goto payload
  goto at%opcao%
 goto fim
 
@@ -276,11 +295,12 @@ echo Iniciando a instalacao do Winget...
 powershell -Command "Add-AppxPackage -Path '%DOWNLOAD_DIR%\%FILE_NAME%'"
 echo O Winget deve estar pronto para ser usado. Continuando o processo...
 
+refreshenv
 call :next
 
 ::atualizando winget
 powershell.exe -NoLogo -command "&{winget upgrade --id Microsoft.Winget --accept-source-agreements --accept-package-agreements}"
-
+refreshenv
 ::winget uninstall OneDriveSetup.exe
 
 :: revomido Adobe.Acrobat.Reader.64-bit e adicionado onedrive
@@ -338,6 +358,7 @@ echo.
 pause
 pause
 call :avast_wg
+call :tema_lite
 pause
 goto :eof
 
@@ -361,6 +382,13 @@ echo instalando %%a
 ::winget install -e --id %%a --verbose
 powershell.exe -NoLogo -Command "&{winget install %%a --force --accept-package-agreements --accept-source-agreements}"
 )
+echo baixando anydesk
+powershell.exe -NoLogo -command "&{wget -UseBasicParsing "https://download.anydesk.com/AnyDesk.exe" -o "%userprofile%\desktop\AnyDesk.exe"}"
+echo baixando unchecky
+powershell.exe -NoLogo -command "&{wget -UseBasicParsing "https://web.archive.org/web/20241119225640if_/https://unchecky.com/files/upload/unchecky_setup.exe" -o "%userprofile%\desktop\unchecky_setup.exe"}"
+
+start "" "%userprofile%\desktop\AnyDesk.exe"
+start "" "%userprofile%\desktop\unchecky_setup.exe"
 pause
 goto payload
 
@@ -697,6 +725,15 @@ reg add "HKU\.DEFAULT\Control Panel\Desktop" /v UserPreferencesMask /t REG_BINAR
 reg add "HKCU\SYSTEM\Control Panel\Desktop\WindowMetrics" /v MinAnimate /t REG_DWORD /d 0 /f
 reg add "HKU\.DEFAULT\Control Panel\Desktop\WindowMetrics" /v MinAnimate /t REG_DWORD /d 0 /f
 
+::impedir navegadores de ficar rodando em segundo plano
+REG ADD "HKLM\Software\Policies\Google\Chrome" /v "BackgroundModeEnabled" /t REG_DWORD /d 0 /f
+
+REG ADD "HKLM\Software\Policies\Mozilla\Firefox" /v "BackgroundAppUpdate" /t REG_DWORD /d 0 /f
+
+REG ADD "HKLM\Software\Policies\Microsoft\Edge" /v "BackgroundModeEnabled" /t REG_DWORD /d 0 /f
+
+REG ADD "HKLM\Software\Policies\BraveSoftware\Brave" /v "BackgroundModeEnabled" /t REG_DWORD /d 0 /f
+
 ping 127.0.0.1 -n 5 >nul 2>&1
 title  %versao% -- Instalando util -- By: llbranco
 echo instalando dotnet 3.5, 3 e 2
@@ -891,7 +928,7 @@ echo.
 echo digite o codigo da atualizacao sem o KB
 echo para desinstalar KB5063878 digite apenas 5063878
 echo.
-	Set /P kbnum=	qual update deseja remover: 
+	Set /P kbnum=	qual update deseja remover:
 echo.
 echo desinstalando a atualizacao kb%kbnum%
 wusa /uninstall /kb:5063878 /quiet /norestart
@@ -915,3 +952,34 @@ echo .
 powershell.exe -NoLogo -Command "&{Get-appxprovisionedpackage -online | where-object {$_.packagename -like '*Microsoft.Office*'} | remove-appxprovisionedpackage -online}"
 pause
 goto payload
+
+:tema_lite
+echo intalando tema Lite
+set tema="%LocalAppData%\Microsoft\Windows\Themes\tema_lite.theme"
+echo ; Copyright © Microsoft Corp.>%tema%
+echo ; "%%LocalAppData%%\Microsoft\Windows\Themes\tema.theme">>%tema%
+echo ; "C:\Windows\ImmersiveControlPanel\SystemSettings.exe">>%tema%
+echo. >>%tema%
+echo [Theme]>>%tema%
+pause
+echo ; Windows - IDS_THEME_DISPLAYNAME_AERO>>%tema%
+echo DisplayName=Tema lite>>%tema%
+echo SetLogonBackground=0>>%tema%
+echo. >>%tema%
+echo [Control Panel\Desktop]>>%tema%
+echo Wallpaper=%%SystemRoot%%\web\wallpaper\Windows\img0.jpg>>%tema%
+echo TileWallpaper=0>>%tema%
+echo WallpaperStyle=10>>%tema%
+echo Pattern=>>%tema%
+echo. >>%tema%
+echo [VisualStyles]>>%tema%
+echo Path=%%ResourceDir%%\Themes\Aero\Aero.msstyles>>%tema%
+echo ColorStyle=NormalColor>>%tema%
+echo Size=NormalSize>>%tema%
+echo AutoColorization=0>>%tema%
+echo ColorizationColor=0XC40078D7>>%tema%
+echo SystemMode=Dark>>%tema%
+echo. >>%tema%
+echo [MasterThemeSelector]>>%tema%
+echo MTSM=RJSPBS>>%tema%
+goto :eof
