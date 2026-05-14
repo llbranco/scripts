@@ -75,6 +75,16 @@ powercfg /h /type reduced
 :criar restauração do sistema
 wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "nome", 100, 7
 
+:comprimir usando dicionaário em ZST
+criar dicionario
+zstd --train FullPathToTrainingSet/* -o dictionaryName
+
+comprimir usando o dicionário
+zstd -D dictionaryName FILE
+
+extrair usando dicionário
+zstd -D dictionaryName --decompress FILE.zst
+
 ### Links úteis
 [universal intel chipset updater](https://github.com/FirstEverTech/Universal-Intel-Chipset-Updater)
 
